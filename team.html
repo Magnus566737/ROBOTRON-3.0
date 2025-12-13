@@ -16,20 +16,18 @@
 
   <style>
     :root{
-      --bg:#070b16;
-      --bg2:#0b1426;
+      --bg0:#070b16;
+      --bg1:#0b1426;
       --txt:#e6f1ff;
-      --muted:#9fb3c8;
+      --muted:#8aa3b8;
 
       --cyan:#00f0ff;
-      --purple:#6c5ce7;
+      --cyanSoft:rgba(0,240,255,.25);
 
-      --card: rgba(255,255,255,.06);
-      --card2: rgba(0,240,255,.08);
-      --border: rgba(0,240,255,.75);
-      --borderSoft: rgba(0,240,255,.25);
+      --box: rgba(255,255,255,.05);
+      --box2: rgba(0,240,255,.08);
 
-      --shadow: 0 18px 55px rgba(0,0,0,.45);
+      --shadow: 0 10px 32px rgba(0,0,0,.45);
     }
 
     *{ box-sizing:border-box; }
@@ -39,13 +37,13 @@
       color:var(--txt);
       background:
         radial-gradient(1100px 520px at 80% -120px, rgba(108,92,231,.35), transparent 60%),
-        radial-gradient(900px 520px at -10% 120%, rgba(0,240,255,.22), transparent 60%),
+        radial-gradient(900px 520px at -10% 120%, rgba(0,240,255,.18), transparent 60%),
         linear-gradient(180deg, #060912, #070b16 50%, #050711);
-      overflow-x:hidden;
       min-height:100vh;
+      overflow-x:hidden;
     }
 
-    /* Navbar like your site */
+    /* Navbar */
     .navbar{
       background: rgba(7,11,22,.75);
       backdrop-filter: blur(10px);
@@ -63,153 +61,121 @@
     .brand-badge{
       width:26px; height:26px;
       border-radius:7px;
-      background: linear-gradient(90deg, var(--cyan), var(--purple));
+      background: linear-gradient(90deg, var(--cyan), rgba(108,92,231,1));
       box-shadow:0 0 18px rgba(0,240,255,.35);
     }
     .nav-link{ color: rgba(230,241,255,.85) !important; font-weight:600; }
     .nav-link:hover{ color:#fff !important; }
 
-    /* Page */
-    .page-wrap{
-      padding-top:78px;
-      padding-bottom:60px;
-    }
+    /* Layout */
+    .page-wrap{ padding-top:85px; padding-bottom:55px; }
 
-    /* Hierarchy canvas */
+    /* ===== HIERARCHY (match your screenshot) ===== */
     .hierarchy{
-      padding: 40px 0 70px;
+      padding: 28px 0 40px;
+      min-height: calc(100vh - 160px);
     }
     .tree{
-      width: 100%;
       display:flex;
       flex-direction:column;
       align-items:center;
       gap: 0;
     }
 
-    /* Node box */
+    /* Boxes */
     .node{
-      background: var(--card);
-      border: 1px solid var(--border);
+      background: var(--box);
+      border: 1px solid var(--cyan);
       border-radius: 12px;
-      box-shadow: 0 0 10px rgba(0,240,255,.18);
-      padding: 10px 14px;
       text-align:center;
-    }
-
-    /* Wide nodes (President/VP) */
-    .node.wide{
-      width: min(980px, 92vw);
-      padding: 12px 16px;
-    }
-
-    /* Medium nodes (GS) */
-    .node.med{
-      width: min(460px, 44vw);
+      box-shadow: 0 0 10px rgba(0,240,255,.15);
       padding: 10px 14px;
     }
 
-    /* Head nodes */
-    .node.head{
-      width: 100%;
-      min-height: 44px;
-      padding: 9px 12px;
-    }
+    .node.wide{ width: min(720px, 92vw); padding: 12px 14px; }
+    .node.gs{ width: min(300px, 44vw); padding: 10px 12px; }
+    .node.head{ width: 100%; padding: 10px 12px; }
 
-    /* Headline inside node (Name + pic + Role on SAME line) */
-    .headline{
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      gap:10px;
-      flex-wrap:nowrap;
-    }
-    .head-name{
+    .name{
       font-weight:700;
-      font-size: 14px;
-      white-space:nowrap;
+      font-size: 13.5px;
+      line-height: 1.2;
     }
-    .head-role{
+    .role{
+      display:block;
+      margin-top:4px;
       font-size: 10px;
-      letter-spacing:.08em;
+      letter-spacing:.1em;
       text-transform:uppercase;
       color: var(--muted);
       font-weight:600;
-      white-space:nowrap;
-    }
-    .head-avatar{
-      width: 26px;
-      height: 26px;
-      border-radius:50%;
-      object-fit:cover;
-      border: 1px solid rgba(0,240,255,.55);
-      box-shadow: 0 0 10px rgba(0,240,255,.18);
-      flex: 0 0 auto;
     }
 
-    /* Slightly bigger for the very top wide nodes */
-    .node.wide .head-name{ font-size: 15px; }
-    .node.wide .head-avatar{ width: 30px; height: 30px; }
-    .node.wide .head-role{ font-size: 10.5px; }
+    /* Head photo (small, keeps box size) */
+    .head-photo{
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 1px solid rgba(0,240,255,.6);
+      box-shadow: 0 0 10px rgba(0,240,255,.18);
+      display:block;
+      margin: 6px auto 0; /* sits between name and role */
+    }
+    .node.wide .head-photo{
+      width: 30px;
+      height: 30px;
+      margin-top: 7px;
+    }
 
     /* Connectors */
     .vline{
       width:2px;
       height:18px;
-      background: linear-gradient(180deg, var(--cyan), var(--purple));
+      background: var(--cyan);
       opacity:.55;
       margin: 6px 0;
     }
 
-    /* Rows */
-    .row-wrap{
-      width: min(1200px, 96vw);
-      display:flex;
-      align-items:flex-start;
-      justify-content:center;
-      gap: 16px;
-      flex-wrap:wrap;
-    }
-
+    /* General secretaries row */
     .gs-row{
-      width:min(980px, 92vw);
+      width: min(720px, 92vw);
       display:flex;
       justify-content:center;
       gap: 18px;
       flex-wrap:wrap;
     }
 
-    /* Heads grid like screenshot */
-    .heads-grid-6{
-      width:min(1320px, 96vw);
+    /* Heads rows: match screenshot layout */
+    .heads-row-6{
+      width: min(1100px, 96vw);
       display:grid;
       grid-template-columns: repeat(6, minmax(0, 1fr));
       gap: 16px;
-      margin-top: 16px;
+      margin-top: 18px;
     }
 
-    .heads-grid-4{
-      width:min(1100px, 96vw);
+    .heads-row-3{
+      width: min(720px, 92vw);
       display:grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
+      grid-template-columns: repeat(3, minmax(0, 1fr));
       gap: 18px;
-      margin-top: 22px;
+      margin-top: 18px;
     }
 
-    @media (max-width: 1400px){
-      .heads-grid-6{ grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    @media (max-width: 1300px){
+      .heads-row-6{ grid-template-columns: repeat(3, minmax(0,1fr)); }
     }
     @media (max-width: 900px){
-      .heads-grid-6{ grid-template-columns: repeat(2, minmax(0, 1fr)); }
-      .heads-grid-4{ grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .heads-row-6{ grid-template-columns: repeat(2, minmax(0,1fr)); }
+      .heads-row-3{ grid-template-columns: repeat(2, minmax(0,1fr)); }
     }
     @media (max-width: 560px){
-      .heads-grid-6{ grid-template-columns: 1fr; }
-      .heads-grid-4{ grid-template-columns: 1fr; }
-      .node.med{ width: min(980px, 92vw); }
+      .heads-row-6{ grid-template-columns: 1fr; }
+      .heads-row-3{ grid-template-columns: 1fr; }
+      .node.gs{ width: min(720px, 92vw); }
     }
 
-    /* Head group (head + members box) */
     .head-group{
       display:flex;
       flex-direction:column;
@@ -217,45 +183,37 @@
       gap: 8px;
     }
 
-    /* Members box under head */
+    /* Members box under each head (like screenshot) */
     .members{
       width: 100%;
-      background: var(--card2);
-      border: 1px solid var(--borderSoft);
-      border-radius: 12px;
+      background: rgba(0,240,255,.06);
+      border: 1px solid rgba(0,240,255,.18);
+      border-radius: 10px;
       padding: 10px 10px;
-      min-height: 54px;
+      min-height: 46px;
+      text-align:center;
     }
 
-    /* Member item (photo + name) */
+    /* Members with tiny avatar but still looks like your screenshot */
     .member{
       display:flex;
       align-items:center;
       justify-content:center;
-      gap: 10px;
-      padding: 4px 0;
-      font-size: 12px;
+      gap: 8px;
+      padding: 3px 0;
+      font-size: 11px;
       color: rgba(230,241,255,.92);
     }
     .member img{
-      width: 22px;
-      height: 22px;
-      border-radius:50%;
-      object-fit:cover;
-      border: 1px solid rgba(0,240,255,.45);
-      box-shadow: 0 0 8px rgba(0,240,255,.12);
-      flex: 0 0 auto;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 1px solid rgba(0,240,255,.40);
+      opacity: .95;
     }
 
-    /* Content head center */
-    .content-center{
-      margin-top: 28px;
-      width: min(560px, 92vw);
-      display:flex;
-      flex-direction:column;
-      align-items:center;
-    }
-
+    /* Footer */
     footer{
       border-top: 1px solid rgba(255,255,255,.08);
       padding: 18px 0;
@@ -269,11 +227,13 @@
 
 <body>
 
+  <!-- NAVBAR -->
   <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
     <div class="container">
       <a class="navbar-brand" href="index.html">
         <span class="brand-badge"></span> ROBOTRON
       </a>
+
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#nav">
         <span class="navbar-toggler-icon"></span>
       </button>
@@ -293,63 +253,52 @@
   <div class="page-wrap">
     <section class="hierarchy">
       <div class="container">
-
         <div class="tree">
 
           <!-- PRESIDENT -->
           <div class="node wide">
-            <div class="headline">
-              <span class="head-name">Abdul Rehman</span>
-              <img class="head-avatar" src="sret.png" alt="Abdul Rehman">
-              <span class="head-role">PRESIDENT</span>
-            </div>
+            <div class="name">Abdul Rehman</div>
+            <img class="head-photo" src="sret.png" alt="Abdul Rehman">
+            <span class="role">PRESIDENT</span>
           </div>
 
           <div class="vline"></div>
 
-          <!-- VICE PRESIDENT -->
+          <!-- VP -->
           <div class="node wide">
-            <div class="headline">
-              <span class="head-name">Hasan Kamal Ibrahim Salman</span>
-              <img class="head-avatar" src="sret.png" alt="Hasan Kamal Ibrahim Salman">
-              <span class="head-role">VICE PRESIDENT</span>
-            </div>
+            <div class="name">Hasan Kamal Ibrahim Salman</div>
+            <img class="head-photo" src="sret.png" alt="Hasan Kamal Ibrahim Salman">
+            <span class="role">VICE PRESIDENT</span>
           </div>
 
           <div class="vline"></div>
 
-          <!-- GENERAL SECRETARIES -->
+          <!-- GS -->
           <div class="gs-row">
-            <div class="node med">
-              <div class="headline">
-                <span class="head-name">Usaid Salman</span>
-                <img class="head-avatar" src="sret.png" alt="Usaid Salman">
-                <span class="head-role">GENERAL SECRETARY</span>
-              </div>
+            <div class="node gs">
+              <div class="name">Usaid Salman</div>
+              <img class="head-photo" src="sret.png" alt="Usaid Salman">
+              <span class="role">GENERAL SECRETARY</span>
             </div>
 
-            <div class="node med">
-              <div class="headline">
-                <span class="head-name">Usayd Omerson</span>
-                <img class="head-avatar" src="sret.png" alt="Usayd Omerson">
-                <span class="head-role">GENERAL SECRETARY</span>
-              </div>
+            <div class="node gs">
+              <div class="name">Usayd Omerson</div>
+              <img class="head-photo" src="sret.png" alt="Usayd Omerson">
+              <span class="role">GENERAL SECRETARY</span>
             </div>
           </div>
 
           <div class="vline"></div>
 
           <!-- HEADS ROW 1 (6) -->
-          <div class="heads-grid-6">
+          <div class="heads-row-6">
 
             <!-- Robotics -->
             <div class="head-group">
               <div class="node head">
-                <div class="headline">
-                  <span class="head-name">Musab Khan</span>
-                  <img class="head-avatar" src="sret.png" alt="Musab Khan">
-                  <span class="head-role">ROBOTICS HEAD</span>
-                </div>
+                <div class="name">Musab Khan</div>
+                <img class="head-photo" src="sret.png" alt="Musab Khan">
+                <span class="role">ROBOTICS HEAD</span>
               </div>
               <div class="vline"></div>
               <div class="members">
@@ -363,11 +312,9 @@
             <!-- Planning -->
             <div class="head-group">
               <div class="node head">
-                <div class="headline">
-                  <span class="head-name">Sadiq Yousuf</span>
-                  <img class="head-avatar" src="sret.png" alt="Sadiq Yousuf">
-                  <span class="head-role">PLANNING HEAD</span>
-                </div>
+                <div class="name">Sadiq Yousuf</div>
+                <img class="head-photo" src="sret.png" alt="Sadiq Yousuf">
+                <span class="role">PLANNING HEAD</span>
               </div>
               <div class="vline"></div>
               <div class="members">
@@ -378,11 +325,9 @@
             <!-- Marketing -->
             <div class="head-group">
               <div class="node head">
-                <div class="headline">
-                  <span class="head-name">Abdullah Malick</span>
-                  <img class="head-avatar" src="sret.png" alt="Abdullah Malick">
-                  <span class="head-role">MARKETING HEAD</span>
-                </div>
+                <div class="name">Abdullah Malick</div>
+                <img class="head-photo" src="sret.png" alt="Abdullah Malick">
+                <span class="role">MARKETING HEAD</span>
               </div>
               <div class="vline"></div>
               <div class="members">
@@ -394,11 +339,9 @@
             <!-- Security & Logistics -->
             <div class="head-group">
               <div class="node head">
-                <div class="headline">
-                  <span class="head-name">Abdul Muqeet</span>
-                  <img class="head-avatar" src="sret.png" alt="Abdul Muqeet">
-                  <span class="head-role">SECURITY & LOGISTICS</span>
-                </div>
+                <div class="name">Abdul Muqeet</div>
+                <img class="head-photo" src="sret.png" alt="Abdul Muqeet">
+                <span class="role">SECURITY &amp; LOGISTICS HEAD</span>
               </div>
               <div class="vline"></div>
               <div class="members">
@@ -408,14 +351,12 @@
               </div>
             </div>
 
-            <!-- Finance -->
+            <!-- Sponsorship & Finance -->
             <div class="head-group">
               <div class="node head">
-                <div class="headline">
-                  <span class="head-name">Hashir Ali</span>
-                  <img class="head-avatar" src="sret.png" alt="Hashir Ali">
-                  <span class="head-role">FINANCE HEAD</span>
-                </div>
+                <div class="name">Hashir Ali</div>
+                <img class="head-photo" src="sret.png" alt="Hashir Ali">
+                <span class="role">SPONSORSHIP &amp; FINANCE HEAD</span>
               </div>
               <div class="vline"></div>
               <div class="members">
@@ -429,11 +370,9 @@
             <!-- Designing -->
             <div class="head-group">
               <div class="node head">
-                <div class="headline">
-                  <span class="head-name">Ahmed Siddiqui</span>
-                  <img class="head-avatar" src="sret.png" alt="Ahmed Siddiqui">
-                  <span class="head-role">DESIGNING HEAD</span>
-                </div>
+                <div class="name">Ahmed Siddiqui</div>
+                <img class="head-photo" src="sret.png" alt="Ahmed Siddiqui">
+                <span class="role">DESIGNING HEAD</span>
               </div>
               <div class="vline"></div>
               <div class="members">
@@ -444,17 +383,15 @@
 
           </div>
 
-          <!-- HEADS ROW 2 (4) -->
-          <div class="heads-grid-4">
+          <!-- HEADS ROW 2 (3 like screenshot) -->
+          <div class="heads-row-3">
 
             <!-- Competitions -->
             <div class="head-group">
               <div class="node head">
-                <div class="headline">
-                  <span class="head-name">Awwab Ahmed</span>
-                  <img class="head-avatar" src="sret.png" alt="Awwab Ahmed">
-                  <span class="head-role">COMPETITIONS HEAD</span>
-                </div>
+                <div class="name">Awwab Ahmed</div>
+                <img class="head-photo" src="sret.png" alt="Awwab Ahmed">
+                <span class="role">COMPETITIONS HEAD</span>
               </div>
               <div class="vline"></div>
               <div class="members">
@@ -467,11 +404,9 @@
             <!-- Developer -->
             <div class="head-group">
               <div class="node head">
-                <div class="headline">
-                  <span class="head-name">Sunain Sadiq</span>
-                  <img class="head-avatar" src="sret.png" alt="Sunain Sadiq">
-                  <span class="head-role">DEVELOPER HEAD</span>
-                </div>
+                <div class="name">Sunain Sadiq</div>
+                <img class="head-photo" src="sret.png" alt="Sunain Sadiq">
+                <span class="role">DEVELOPER HEAD</span>
               </div>
               <div class="vline"></div>
               <div class="members">
@@ -480,37 +415,23 @@
               </div>
             </div>
 
-            <!-- (Empty placeholders if you want 4 like screenshot spacing) -->
-            <div class="head-group" style="opacity:0; pointer-events:none;">
-              <div class="node head"><div class="headline"><span class="head-name">.</span><img class="head-avatar" src="sret.png" alt=""><span class="head-role">.</span></div></div>
-              <div class="vline"></div><div class="members"></div>
-            </div>
-
-            <div class="head-group" style="opacity:0; pointer-events:none;">
-              <div class="node head"><div class="headline"><span class="head-name">.</span><img class="head-avatar" src="sret.png" alt=""><span class="head-role">.</span></div></div>
-              <div class="vline"></div><div class="members"></div>
-            </div>
-
-          </div>
-
-          <!-- CONTENT (CENTER) -->
-          <div class="content-center">
-            <div class="node head" style="width: min(520px, 92vw);">
-              <div class="headline">
-                <span class="head-name">Yousuf Ahmer</span>
-                <img class="head-avatar" src="sret.png" alt="Yousuf Ahmer">
-                <span class="head-role">CONTENT HEAD</span>
+            <!-- Content -->
+            <div class="head-group">
+              <div class="node head">
+                <div class="name">Yousuf Ahmer</div>
+                <img class="head-photo" src="sret.png" alt="Yousuf Ahmer">
+                <span class="role">CONTENT HEAD</span>
+              </div>
+              <div class="vline"></div>
+              <div class="members">
+                <div class="member"><img src="sret.png" alt=""> Rayyan Khan</div>
+                <div class="member"><img src="sret.png" alt=""> Ali Amir</div>
               </div>
             </div>
-            <div class="vline"></div>
-            <div class="members" style="width: min(520px, 92vw);">
-              <div class="member"><img src="sret.png" alt=""> Rayyan Khan</div>
-              <div class="member"><img src="sret.png" alt=""> Ali Amir</div>
-            </div>
+
           </div>
 
         </div>
-
       </div>
     </section>
   </div>
