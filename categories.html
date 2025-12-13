@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>ROBOTRON 3.0 — Categories</title>
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;800&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet"/>
+
+  <style>
+    :root{
+      --bg-0:#070b16; --bg-1:#0b1426; --bg-2:#0f1b33;
+      --txt:#e6f1ff; --muted:#9fb3c8;
+      --primary:#6c5ce7; --primary-2:#00e5ff; --accent:#00ff9d;
+      --glass:rgba(255,255,255,.06); --glass-strong:rgba(255,255,255,.09);
+      --grad-1: linear-gradient(135deg,var(--primary) 0%, var(--primary-2) 50%, var(--accent) 100%);
+      --border-grad: linear-gradient(90deg,var(--primary-2),var(--primary),var(--accent));
+      --card-shadow: 0 8px 30px rgba(0,0,0,.35);
+    }
+    *{box-sizing:border-box}
+    body{font-family:'Roboto',sans-serif;color:var(--txt);background:var(--bg-0);min-height:100vh;overflow-x:hidden;}
+
+    body::before{
+      content:""; position:fixed; inset:0; pointer-events:none; z-index:-2;
+      background:
+        radial-gradient(900px 500px at 80% -100px, rgba(108,92,231,.28), transparent 60%),
+        radial-gradient(800px 480px at -10% 120%, rgba(0,229,255,.22), transparent 60%);
+    }
+    body::after{
+      content:""; position:fixed; inset:0; z-index:-1; opacity:.05; pointer-events:none;
+      background-image: linear-gradient(to right, rgba(255,255,255,.06) 1px, transparent 1px),
+                        linear-gradient(to bottom, rgba(255,255,255,.06) 1px, transparent 1px);
+      background-size:40px 40px; animation:move 40s linear infinite;
+    }
+    @keyframes move{ from{transform:translateY(0)} to{transform:translateY(40px)} }
+
+    h1,h2,h3,h4{font-family:'Orbitron',sans-serif}
+    .navbar{ background: rgba(7,11,22,.75); backdrop-filter: blur(10px); border-bottom:1px solid rgba(255,255,255,.08); }
+    .navbar-brand{ font-weight:800; letter-spacing:1.2px; color:#fff !important; display:flex; align-items:center; gap:.6rem; }
+    .brand-accent{ width:26px;height:26px;border-radius:6px;background:var(--border-grad); box-shadow:0 0 18px rgba(0,229,255,.35); }
+    .nav-link{ position:relative } .nav-link i{ margin-right:.35rem }
+    .nav-link::after{ content:""; position:absolute; left:0; bottom:-6px; width:0; height:2px; background:var(--border-grad); transition:width .25s ease; }
+    .nav-link:hover::after{ width:100% }
+
+    .section{ padding:70px 0; background:var(--bg-1); border-top:1px solid rgba(255,255,255,.07); border-bottom:1px solid rgba(255,255,255,.07); }
+    .section-title{text-align:center;margin-bottom:24px}
+    .title-underline{ width:88px;height:3px;margin:10px auto 0;background:var(--border-grad);border-radius:999px; box-shadow:0 0 20px rgba(0,229,255,.35); }
+
+    .glass-card{ background:var(--glass); border:1px solid rgba(255,255,255,.12); border-radius:16px; box-shadow:var(--card-shadow);
+      overflow:hidden; transition:transform .2s, background .2s, box-shadow .2s; height:100%; display:flex; flex-direction:column; }
+    .glass-card:hover{ transform:translateY(-6px); background:var(--glass-strong); box-shadow:0 12px 40px rgba(0,0,0,.5); }
+
+    .category-img{ height:220px; overflow:hidden }
+    .category-img img{ width:100%; height:100%; object-fit:cover; transition:transform .5s ease }
+    .glass-card:hover .category-img img{ transform:scale(1.06) }
+    .category-content{ padding:18px; display:flex; flex-direction:column; flex:1; }
+    .category-content h3{ font-size:1.15rem; margin:0 0 6px }
+    .category-price{ color:var(--accent); font-weight:800; letter-spacing:.4px; margin-bottom:10px }
+    .category-content .d-flex{ margin-top:auto; }
+
+    .btn-primary{ background:var(--border-grad); border:0; border-radius:12px; padding:10px 20px; font-weight:700; box-shadow:0 10px 30px rgba(0,229,255,.18); }
+    .btn-outline-primary{ border-image: var(--border-grad) 1; border-width:2px; border-style:solid; border-radius:12px; color:var(--txt); font-weight:600; }
+    .btn-outline-primary:hover{ background:var(--glass) }
+
+    .toolbar .form-control{ background:#0e1a31; color:#fff; border:1px solid rgba(255,255,255,.14); border-radius:10px; }
+    .toolbar .form-control:focus{ box-shadow:0 0 0 .25rem rgba(0,229,255,.15); border-color:#00e5ff; background:#0f1f3a }
+
+    footer{ background:#060a13; color:#9fb3c8; padding:26px 0; text-align:center; }
+
+    /* CSS Grid for category cards */
+    #cardsRow {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 1.5rem;
+    }
+
+    /* Tablet */
+    @media (max-width: 991.98px) {
+      #cardsRow {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    /* Mobile */
+    @media (max-width: 767.98px) {
+      #cardsRow {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    #cardsRow .category-card-wrap {
+      width: 100%;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+    <div class="container">
+      <a class="navbar-brand" href="index.html"><span class="brand-accent"></span> ROBOTRON</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"><span class="navbar-toggler-icon"></span></button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item"><a class="nav-link" href="index.html"><i class="fa fa-home"></i> Home</a></li>
+          <li class="nav-item"><a class="nav-link" href="team.html"><i class="fa fa-users"></i> Team</a></li>
+          <li class="nav-item"><a class="nav-link active" href="categories.html"><i class="fa fa-th-list"></i> Categories</a></li>
+          <li class="nav-item"><a class="nav-link" href="index.html#team"><i class="fa fa-photo"></i> Gallery</a></li>
+          <li class="nav-item"><a class="nav-link" href="contact.html"><i class="fa fa-envelope"></i> Contact</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- CATEGORIES -->
+  <section class="section">
+    <div class="container">
+      <div class="section-title">
+        <h2>Competition Categories</h2>
+        <div class="title-underline"></div>
+      </div>
+
+      <div class="toolbar glass-card p-3 p-md-4 mb-4">
+        <div class="row g-3 align-items-center">
+          <div class="col-md-6">
+            <label class="form-label mb-1">Search</label>
+            <input id="searchBox" type="text" class="form-control" placeholder="Search categories...">
+          </div>
+          <div class="col-md-6 text-md-end">
+            <a href="registration.html" class="btn btn-outline-primary"><i class="fa fa-arrow-right"></i> Go to Registration</a>
+          </div>
+        </div>
+      </div>
+
+      <div id="cardsRow" class="row g-4">
+        <!-- Line Following -->
+        <div class="col-lg-4 col-md-6 col-sm-12 category-card-wrap d-flex align-items-stretch" data-name="line following robot">
+          <div class="glass-card h-100">
+            <div class="category-img"><img src="https://images.unsplash.com/photo-1551033406-611cf9a28f67?q=80&w=2080&auto=format&fit=crop" alt="Line Following Robot"></div>
+            <div class="category-content">
+              <h3>Line Following Robot</h3>
+              <p class="text-muted mb-2" style="min-height:40px">Autonomous tracking challenge on predefined tracks.</p>
+              <div class="d-flex justify-content-between align-items-center">
+                <div class="category-price">Entry Fee: $50</div>
+                <a class="btn btn-outline-primary select-category" data-category="Line Following Robot" data-fee="50">Register</a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Robo Sumo -->
+        <div class="col-lg-4 col-md-6 col-sm-12 category-card-wrap d-flex align-items-stretch" data-name="robo sumo">
+          <div class="glass-card h-100">
+            <div class="category-img"><img src="https://images.unsplash.com/photo-1581093450021-4a7360e9a3c3?q=80&w=2080&auto=format&fit=crop" alt="Robo Sumo"></div>
+            <div class="category-content">
+              <h3>Robo Sumo</h3>
+              <p class="text-muted mb-2" style="min-height:40px">Push rivals out of the ring using power & strategy.</p>
+              <div class="d-flex justify-content-between align-items-center">
+                <div class="category-price">Entry Fee: $75</div>
+                <a class="btn btn-outline-primary select-category" data-category="Robo Sumo" data-fee="75">Register</a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Maze Solver -->
+        <div class="col-lg-4 col-md-6 col-sm-12 category-card-wrap d-flex align-items-stretch" data-name="maze solver">
+          <div class="glass-card h-100">
+            <div class="category-img"><img src="https://images.unsplash.com/photo-1581094271901-8022df4466f9?q=80&w=2080&auto=format&fit=crop" alt="Maze Solver"></div>
+            <div class="category-content">
+              <h3>Maze Solver</h3>
+              <p class="text-muted mb-2" style="min-height:40px">Algorithmic pathfinding to the exit in record time.</p>
+              <div class="d-flex justify-content-between align-items-center">
+                <div class="category-price">Entry Fee: $60</div>
+                <a class="btn btn-outline-primary select-category" data-category="Maze Solver" data-fee="60">Register</a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Drone Racing -->
+        <div class="col-lg-4 col-md-6 col-sm-12 category-card-wrap d-flex align-items-stretch" data-name="drone racing">
+          <div class="glass-card h-100">
+            <div class="category-img"><img src="https://images.unsplash.com/photo-1581094794329-c8112a89af12?q=80&w=2080&auto=format&fit=crop" alt="Drone Racing"></div>
+            <div class="category-content">
+              <h3>Drone Racing</h3>
+              <p class="text-muted mb-2" style="min-height:40px">High-speed precision course for aerial robots.</p>
+              <div class="d-flex justify-content-between align-items-center">
+                <div class="category-price">Entry Fee: $100</div>
+                <a class="btn btn-outline-primary select-category" data-category="Drone Racing" data-fee="100">Register</a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Speed Coding -->
+        <div class="col-lg-4 col-md-6 col-sm-12 category-card-wrap d-flex align-items-stretch" data-name="speed coding">
+          <div class="glass-card h-100">
+            <div class="category-img"><img src="https://images.unsplash.com/photo-1544717305-2782549b5136?q=80&w=2080&auto=format&fit=crop" alt="Speed Coding"></div>
+            <div class="category-content">
+              <h3>Speed Coding</h3>
+              <p class="text-muted mb-2" style="min-height:40px">Time-bound coding problems to test logic & speed.</p>
+              <div class="d-flex justify-content-between align-items-center">
+                <div class="category-price">Entry Fee: $40</div>
+                <a class="btn btn-outline-primary select-category" data-category="Speed Coding" data-fee="40">Register</a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- AI Challenge -->
+        <div class="col-lg-4 col-md-6 col-sm-12 category-card-wrap d-flex align-items-stretch" data-name="ai challenge">
+          <div class="glass-card h-100">
+            <div class="category-img"><img src="https://images.unsplash.com/photo-1541178735493-479c1a27ed24?q=80&w=2080&auto=format&fit=crop" alt="AI Challenge"></div>
+            <div class="category-content">
+              <h3>AI Challenge</h3>
+              <p class="text-muted mb-2" style="min-height:40px">Apply ML/AI to solve real-world tasks.</p>
+              <div class="d-flex justify-content-between align-items-center">
+                <div class="category-price">Entry Fee: $80</div>
+                <a class="btn btn-outline-primary select-category" data-category="AI Challenge" data-fee="80">Register</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div><!-- /row -->
+    </div>
+  </section>
+
+  <footer><div class="container"><p>&copy; 2025 Robotron. Made By SRET</p></div></footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script>
+    // Choose one category and go
+    $(document).on('click', '.select-category', function(){
+      const cat = $(this).data('category');
+      const fee = Number($(this).data('fee')) || 0;
+      localStorage.setItem('robotronSelected', JSON.stringify({ category: cat, fee }));
+      window.location.href = 'registration.html';
+    });
+
+    // search filter
+    $('#searchBox').on('input', function(){
+      const q = this.value.toLowerCase();
+      $('.category-card-wrap').each(function(){
+        const name = $(this).data('name'); $(this).toggle(name.includes(q));
+      });
+    });
+  </script>
+</body>
+</html>

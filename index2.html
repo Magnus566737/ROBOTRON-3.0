@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Glamour Cosmetics — Beauty for Everyone</title>
+  <meta name="description" content="Shop skincare, makeup, and fragrances. Fast shipping, secure checkout."/>
+  <style>
+    :root{
+      --primary:#e88aad;          /* brand pink */
+      --primary-600:#d66c95;
+      --bg:#fff7fa;
+      --text:#222;
+      --muted:#6b7280;
+      --card:#ffffff;
+      --stroke:#f0e3ea;
+      --success:#22c55e;
+      --danger:#ef4444;
+    }
+    *{box-sizing:border-box}
+    html,body{margin:0;padding:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;color:var(--text);background:var(--bg)}
+    a{color:inherit;text-decoration:none}
+    img{max-width:100%;display:block}
+    button{cursor:pointer}
+
+    /* Top bar */
+    .topbar{background:var(--primary);color:#fff;font-size:.95rem}
+    .container{max-width:1100px;margin:0 auto;padding:0 16px}
+    .topbar .row{display:flex;align-items:center;justify-content:space-between;padding:8px 0}
+    .badge{background:#fff;color:var(--primary);padding:4px 10px;border-radius:20px;font-weight:600}
+
+    /* Header / Nav */
+    header{position:sticky;top:0;z-index:50;background:#fff;border-bottom:1px solid var(--stroke)}
+    .nav{display:flex;align-items:center;gap:16px;padding:14px 0}
+    .brand{display:flex;align-items:center;gap:10px;font-weight:800;font-size:1.25rem;letter-spacing:.5px}
+    .brand .dot{width:10px;height:10px;border-radius:50%;background:var(--primary)}
+    .nav-right{margin-left:auto;display:flex;align-items:center;gap:12px}
+    .search{flex:1;display:flex;align-items:center;gap:8px;border:1px solid var(--stroke);border-radius:999px;padding:8px 12px;max-width:520px;background:#fff}
+    .search input{border:0;outline:0;width:100%;font-size:.95rem}
+    .pill{padding:8px 14px;border:1px solid var(--stroke);border-radius:999px;background:#fff}
+    .btn{border:0;border-radius:10px;background:var(--primary);color:#fff;padding:10px 14px;font-weight:700}
+    .btn:active{transform:translateY(1px)}
+    .icon-btn{border:1px solid var(--stroke);background:#fff;border-radius:12px;padding:8px 10px;display:inline-flex;gap:8px;align-items:center}
+    .qty-dot{background:var(--danger);color:#fff;border-radius:999px;font-size:.75rem;padding:2px 7px;margin-left:6px}
+
+    /* Mobile nav toggle */
+    .hamburger{display:none}
+
+    /* Hero */
+    .hero{display:grid;grid-template-columns:1.2fr .8fr;gap:24px;align-items:center;padding:28px 0}
+    .hero-card{background:linear-gradient(120deg,#fff,#ffe9f1);border:1px solid var(--stroke);border-radius:16px;padding:24px}
+    .hero h1{font-size:2rem;margin:0 0 10px}
+    .hero p{color:var(--muted);margin:0 0 18px}
+    .hero .actions{display:flex;gap:10px;flex-wrap:wrap}
+    .trust{display:flex;gap:16px;margin-top:14px;color:var(--muted);font-size:.9rem}
+
+    /* Filters */
+    .filters{display:flex;gap:10px;flex-wrap:wrap;padding:10px 0 2px}
+    .chip{border:1px solid var(--stroke);background:#fff;border-radius:999px;padding:8px 14px;font-weight:600}
+    .chip.active{background:var(--primary);border-color:var(--primary);color:#fff}
+
+    /* Grid */
+    .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin:18px 0 36px}
+    .card{background:var(--card);border:1px solid var(--stroke);border-radius:16px;overflow:hidden;display:flex;flex-direction:column;transition:transform .15s}
+    .card:hover{transform:translateY(-3px)}
+    .thumb{aspect-ratio:1/1;background:#fff6fb;display:flex;align-items:center;justify-content:center}
+    .thumb img{width:78%;height:auto;object-fit:contain}
+    .card-body{padding:12px 14px;display:flex;flex-direction:column;gap:8px}
+    .title{font-weight:700;font-size:1rem;line-height:1.2}
+    .muted{color:var(--muted);font-size:.9rem}
+    .price-row{display:flex;align-items:center;justify-content:space-between}
+    .price{font-weight:800}
+    .old{color:#9ca3af;text-decoration:line-through;margin-left:8px;font-weight:600}
+    .cta-row{display:flex;gap:8px;margin-top:6px}
+    .sec{border:1px solid var(--stroke);background:#fff;color:var(--text)}
+
+    /* Sections */
+    section h2{font-size:1.4rem;margin:0 0 8px}
+    .sub{color:var(--muted);margin:0 0 10px}
+
+    /* Newsletter & Contact */
+    .newsletter,.contact{background:#fff;border:1px solid var(--stroke);border-radius:16px;padding:18px}
+    .inline-form{display:flex;gap:8px;flex-wrap:wrap}
+    .inline-form input,.inline-form textarea{width:260px;max-width:100%;border:1px solid var(--stroke);border-radius:10px;padding:10px 12px;font-size:.95rem}
+    textarea{min-height:110px}
+
+    /* Footer */
+    footer{margin-top:34px;border-top:1px solid var(--stroke);background:#fff}
+    .footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:16px;padding:18px 0}
+    .small{font-size:.92rem;color:var(--muted)}
+    .credit{border-top:1px solid var(--stroke);padding:12px 0;color:var(--muted);font-size:.9rem}
+
+    /* Drawer Cart */
+    .drawer{position:fixed;top:0;right:-420px;width:380px;max-width:88vw;height:100vh;background:#fff;border-left:1px solid var(--stroke);box-shadow:-6px 0 30px rgba(0,0,0,.05);transition:right .25s ease;z-index:70;display:flex;flex-direction:column}
+    .drawer.open{right:0}
+    .drawer header{position:sticky;top:0;border-bottom:1px solid var(--stroke);padding:14px 16px;background:#fff;z-index:1}
+    .drawer .list{padding:12px 16px;flex:1;overflow:auto}
+    .item{display:grid;grid-template-columns:64px 1fr auto;gap:10px;align-items:center;border-bottom:1px dashed var(--stroke);padding:10px 0}
+    .qty{display:flex;align-items:center;gap:6px}
+    .qty button{width:28px;height:28px;border:1px solid var(--stroke);border-radius:8px;background:#fff}
+    .drawer .summary{border-top:1px solid var(--stroke);padding:14px 16px}
+    .row-between{display:flex;justify-content:space-between;align-items:center;margin:6px 0}
+
+    /* Modal */
+    .modal-backdrop{position:fixed;inset:0;background:rgba(0,0,0,.35);display:none;align-items:center;justify-content:center;z-index:60;padding:16px}
+    .modal{background:#fff;border-radius:16px;border:1px solid var(--stroke);max-width:720px;width:100%;overflow:hidden}
+    .modal-head{display:flex;justify-content:space-between;align-items:center;padding:12px 16px;border-bottom:1px solid var(--stroke)}
+    .modal-body{display:grid;grid-template-columns:1fr 1fr;gap:18px;padding:16px}
+    .modal-foot{padding:12px 16px;border-top:1px solid var(--stroke);display:flex;justify-content:flex-end;gap:8px}
+    .close{border:0;background:#fff;font-size:1.2rem}
+
+    /* Toast */
+    .toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);background:#111;color:#fff;padding:10px 14px;border-radius:10px;opacity:0;pointer-events:none;transition:opacity .2s,transform .2s;z-index:80}
+    .toast.show{opacity:1;transform:translateX(-50%) translateY(-4px)}
+
+    /* Responsive */
+    @media (max-width: 960px){
+      .hero{grid-template-columns:1fr}
+      .grid{grid-template-columns:repeat(2,1fr)}
+      .footer-grid{grid-template-columns:1fr 1fr}
+      .search{max-width:none}
+    }
+    @media (max-width: 640px){
+      .grid{grid-template-columns:1fr}
+      .nav{flex-wrap:wrap}
+      .hamburger{display:inline-flex}
+      .filters{overflow:auto}
+      .hero h1{font-size:1.6rem}
+    }
+  </style>
+</head>
+<body>
+  <!-- Top Promo -->
+  <div class="topbar">
+    <div class="container">
+      <div class="row">
+        <div>Free shipping over <strong>PKR 3,000</strong> • 30-day returns</div>
+        <div class="badge">NEW: Summer Glow Set</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Header / Nav -->
+  <header>
+    <div class="container nav">
+      <div class="brand"><span class="dot"></span> Glamour Cosmetics</div>
+
+      <div class="search" style="flex:1" role="search">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M21 21l-4.2-4.2M10.5 18a7.5 7.5 0 1 1 0-15 7.5 7.5 0 0 1 0 15Z" stroke="#999" stroke-width="1.6" stroke-linecap="round"/></svg>
+        <input id="searchInput" placeholder="Search makeup, skincare, fragrances…" />
+      </div>
+
+      <button class="icon-btn" id="cartBtn" aria-label="Open cart">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M3 3h2l2.2 12.6A2 2 0 0 0 9.2 17h7.6a2 2 0 0 0 2-1.7L20 8H6" stroke="#111" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Cart <span class="qty-dot" id="cartCount">0</span>
+      </button>
+
+      <button class="hamburger icon-btn" id="scrollToProducts" aria-label="Browse products">
+        Browse
+      </button>
+    </div>
+  </header>
+
+  <main class="container">
+    <!-- Hero -->
+    <section class="hero" aria-label="Intro">
+      <div class="hero-card">
+        <h1>Glow up your routine ✨</h1>
+        <p>High-quality cosmetics at fair prices—curated for all skin tones. Shop best-sellers, clean skincare, and iconic fragrances.</p>
+        <div class="actions">
+          <a href="#products" class="btn">Shop Best Sellers</a>
+          <a href="#skincare" class="pill">Skincare</a>
+          <a href="#makeup" class="pill">Makeup</a>
+          <a href="#fragrance" class="pill">Fragrance</a>
+        </div>
+        <div class="trust">
+          <span>🔒 Secure Checkout</span>
+          <span>⚡ Fast Delivery</span>
+          <span>💬 24/7 Support</span>
+        </div>
+      </div>
+      <div class="hero-card" style="display:grid;place-items:center">
+        <img alt="Cosmetics hero" src="https://images.unsplash.com/photo-1604881991720-f91add269bed?q=80&w=1200&auto=format&fit=crop" />
+      </div>
+    </section>
+
+    <!-- Filters -->
+    <section id="products">
+      <h2>Featured Products</h2>
+      <p class="sub">Search, filter by category, then add to cart. Click a product for details.</p>
+      <div class="filters" id="categoryChips" role="tablist" aria-label="Categories">
+        <!-- Chips generated by JS -->
+      </div>
+
+      <!-- Product Grid -->
+      <div class="grid" id="productGrid" aria-live="polite">
+        <!-- Cards generated by JS -->
+      </div>
+    </section>
+
+    <!-- Newsletter & Contact -->
+    <section style="display:grid;grid-template-columns:1.2fr .8fr;gap:16px">
+      <div class="newsletter">
+        <h2>Join our newsletter</h2>
+        <p class="sub">Exclusive deals, early access, and tips for glowing skin.</p>
+        <form class="inline-form" id="newsletterForm">
+          <input type="email" required placeholder="Your email address" name="email" />
+          <button class="btn" type="submit">Subscribe</button>
+        </form>
+        <p class="small" id="newsletterMsg"></p>
+      </div>
+
+      <div class="contact">
+        <h2>Contact us</h2>
+        <p class="sub">Have a question? We'd love to help.</p>
+        <form class="inline-form" id="contactForm">
+          <input type="text" name="name" placeholder="Your name" required />
+          <input type="email" name="email" placeholder="Your email" required />
+          <textarea name="message" placeholder="How can we help?" required></textarea>
+          <button class="btn" type="submit">Send Message</button>
+        </form>
+        <p class="small" id="contactMsg"></p>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container footer-grid">
+      <div>
+        <div class="brand" style="margin-bottom:10px"><span class="dot"></span> Glamour Cosmetics</div>
+        <p class="small">Premium formulas, ethical sourcing, and cruelty-free testing. We believe beauty is for everyone.</p>
+      </div>
+      <div>
+        <h3 style="margin:0 0 8px">Shop</h3>
+        <p class="small"><a href="#makeup">Makeup</a></p>
+        <p class="small"><a href="#skincare">Skincare</a></p>
+        <p class="small"><a href="#fragrance">Fragrance</a></p>
+      </div>
+      <div>
+        <h3 style="margin:0 0 8px">Support</h3>
+        <p class="small"><a href="#">Shipping & Returns</a></p>
+        <p class="small"><a href="#">FAQs</a></p>
+        <p class="small"><a href="#">Contact</a></p>
+      </div>
+      <div>
+        <h3 style="margin:0 0 8px">Legal</h3>
+        <p class="small"><a href="#">Privacy Policy</a></p>
+        <p class="small"><a href="#">Terms of Service</a></p>
+        <p class="small">© <span id="year"></span> Glamour Cosmetics</p>
+      </div>
+    </div>
+    <div class="container credit">Made with ❤️ — Demo store (no real payments).</div>
+  </footer>
+
+  <!-- Drawer Cart -->
+  <aside id="drawer" class="drawer" aria-hidden="true" aria-label="Shopping cart">
+    <header style="display:flex;justify-content:space-between;align-items:center">
+      <strong>Your Cart</strong>
+      <button class="icon-btn" id="closeCart">Close</button>
+    </header>
+    <div class="list" id="cartList"></div>
+    <div class="summary">
+      <div class="row-between small"><span>Subtotal</span><strong id="subtotal">PKR 0</strong></div>
+      <div class="row-between small"><span>Shipping</span><span>Calculated at checkout</span></div>
+      <div class="row-between"><strong>Total</strong><strong id="total">PKR 0</strong></div>
+      <button class="btn" id="checkoutBtn" style="width:100%;margin-top:8px">Proceed to Checkout</button>
+      <p class="small" id="checkoutMsg"></p>
+    </div>
+  </aside>
+
+  <!-- Modal -->
+  <div class="modal-backdrop" id="modalBackdrop" role="dialog" aria-modal="true" aria-hidden="true">
+    <div class="modal">
+      <div class="modal-head">
+        <strong id="modalTitle">Product</strong>
+        <button class="close" id="closeModal" aria-label="Close">✕</button>
+      </div>
+      <div class="modal-body">
+        <div id="modalImgWrap"><img id="modalImg" alt="Product image"/></div>
+        <div>
+          <p class="muted" id="modalCategory"></p>
+          <p id="modalDesc" class="small" style="line-height:1.5"></p>
+          <div class="price-row" style="margin:10px 0 6px">
+            <div>
+              <span class="price" id="modalPrice"></span>
+              <span class="old" id="modalOld"></span>
+            </div>
+            <button class="pill" id="modalStock"></button>
+          </div>
+          <div class="cta-row">
+            <button class="btn" id="modalAdd">Add to Cart</button>
+            <button class="sec" id="modalWish">♡ Wishlist</button>
+          </div>
+        </div>
+      </div>
+      <div class="modal-foot">
+        <button class="icon-btn" id="shareBtn">Share</button>
+        <button class="icon-btn" id="copyLinkBtn">Copy Link</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div class="toast" id="toast"></div>
+
+  <script>
+    // ---- Demo Data ----
+    const PRODUCTS = [
+      {id:'mk001', name:'Velvet Matte Lipstick', category:'Makeup', price:1450, old:1800, stock:18, rating:4.7,
+        img:'https://images.unsplash.com/photo-1619682817481-3dc3d0a0b2e1?q=80&w=800&auto=format&fit=crop',
+        desc:'Rich pigment, long-wear, non-drying. Infused with jojoba oil for a soft matte finish.'},
+      {id:'sk001', name:'Hydra+ Daily Moisturizer', category:'Skincare', price:2100, old:0, stock:32, rating:4.9,
+        img:'https://images.unsplash.com/photo-1611930022073-b7a4ba5fcccd?q=80&w=800&auto=format&fit=crop',
+        desc:'Lightweight hydration with hyaluronic acid and ceramides. Suitable for all skin types.'},
+      {id:'fr001', name:'Bloom Eau de Parfum 50ml', category:'Fragrance', price:5200, old:5800, stock:12, rating:4.6,
+        img:'https://images.unsplash.com/photo-1585386959984-a4155223168f?q=80&w=800&auto=format&fit=crop',
+        desc:'Modern floral with jasmine, tuberose, and musk. Long-lasting and elegant.'},
+      {id:'mk002', name:'Glow Highlighter Stick', category:'Makeup', price:1650, old:1900, stock:22, rating:4.8,
+        img:'https://images.unsplash.com/photo-1567432942385-4a6a2a5d1f3c?q=80&w=800&auto=format&fit=crop',
+        desc:'Creamy stick highlighter for instant radiance. Vitamin E for skin comfort.'},
+      {id:'sk002', name:'Vitamin C Bright Serum', category:'Skincare', price:2850, old:3200, stock:14, rating:4.5,
+        img:'https://images.unsplash.com/photo-1585238342028-4bbc3dfe6a16?q=80&w=800&auto=format&fit=crop',
+        desc:'10% stabilized Vitamin C + niacinamide. Fades dark spots and boosts glow.'},
+      {id:'fr002', name:'Noir Oud 100ml', category:'Fragrance', price:7900, old:0, stock:5, rating:4.4,
+        img:'https://images.unsplash.com/photo-1563170351-be82bc888aa4?q=80&w=800&auto=format&fit=crop',
+        desc:'Warm oud with saffron and amber. Statement scent for evenings.'},
+      {id:'sk003', name:'Soothe Clay Mask', category:'Skincare', price:1950, old:2200, stock:19, rating:4.3,
+        img:'https://images.unsplash.com/photo-1616745300947-480b527c95dc?q=80&w=800&auto=format&fit=crop',
+        desc:'Detoxifying kaolin clay + aloe. Refines pores without stripping.'},
+      {id:'mk003', name:'Lash Lift Mascara', category:'Makeup', price:1750, old:0, stock:28, rating:4.7,
+        img:'https://images.unsplash.com/photo-1596461404969-9ae70f2830c1?q=80&w=800&auto=format&fit=crop',
+        desc:'Smudge-proof length and curl up to 16h. Argan oil strengthened.'}
+    ];
+
+    const CATEGORIES = ['All','Makeup','Skincare','Fragrance'];
+
+    // ---- State ----
+    let state = {
+      search: '',
+      category: 'All',
+      cart: JSON.parse(localStorage.getItem('cart')||'[]')
+    };
+
+    // ---- Helpers ----
+    const el = (sel)=>document.querySelector(sel);
+    const fmt = (n)=> 'PKR ' + (n||0).toLocaleString();
+    const toast = (msg)=>{ const t=el('#toast'); t.textContent=msg; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),1600); };
+
+    // ---- Render Category Chips ----
+    function renderChips(){
+      const wrap = el('#categoryChips'); wrap.innerHTML='';
+      CATEGORIES.forEach(cat=>{
+        const b = document.createElement('button');
+        b.className = 'chip' + (state.category===cat?' active':'');
+        b.textContent = cat;
+        b.setAttribute('role','tab');
+        b.onclick = ()=>{ state.category=cat; renderProducts(); renderChips(); };
+        wrap.appendChild(b);
+      });
+    }
+
+    // ---- Render Products ----
+    function filteredProducts(){
+      return PRODUCTS.filter(p=>{
+        const byCat = state.category==='All' || p.category===state.category;
+        const bySearch = !state.search || p.name.toLowerCase().includes(state.search) || p.desc.toLowerCase().includes(state.search);
+        return byCat && bySearch;
+      });
+    }
+
+    function productCard(p){
+      const old = p.old? `<span class="old">${fmt(p.old)}</span>`:'';
+      return `
+        <article class="card" data-id="${p.id}">
+          <div class="thumb">
+            <img loading="lazy" alt="${p.name}" src="${p.img}">
+          </div>
+          <div class="card-body">
+            <div class="title">${p.name}</div>
+            <div class="muted small">${p.category} • ★ ${p.rating}</div>
+            <div class="price-row"><div class="price">${fmt(p.price)}</div><div>${old}</div></div>
+            <div class="cta-row">
+              <button class="btn add" data-id="${p.id}">Add to Cart</button>
+              <button class="sec view" data-id="${p.id}">Quick View</button>
+            </div>
+          </div>
+        </article>
+      `;
+    }
+
+    function renderProducts(){
+      const grid = el('#productGrid');
+      const items = filteredProducts();
+      grid.innerHTML = items.map(productCard).join('') || `<p class="small muted">No items found. Try another search.</p>`;
+      // Bind buttons
+      grid.querySelectorAll('.add').forEach(btn=>btn.addEventListener('click',()=>addToCart(btn.dataset.id)));
+      grid.querySelectorAll('.view').forEach(btn=>btn.addEventListener('click',()=>openModal(btn.dataset.id)));
+      // Anchors for sections
+      document.getElementById('makeup')?.remove();
+      document.getElementById('skincare')?.remove();
+      document.getElementById('fragrance')?.remove();
+      const mk = document.createElement('span'); mk.id='makeup';
+      const sk = document.createElement('span'); sk.id='skincare';
+      const fr = document.createElement('span'); fr.id='fragrance';
+      grid.prepend(fr,sk,mk);
+    }
+
+    // ---- Cart ----
+    function saveCart(){ localStorage.setItem('cart', JSON.stringify(state.cart)); }
+    function cartCount(){ return state.cart.reduce((a,c)=>a+c.qty,0); }
+    function cartTotal(){ return state.cart.reduce((a,c)=>a+c.qty*c.price,0); }
+
+    function addToCart(id, qty=1){
+      const p = PRODUCTS.find(x=>x.id===id);
+      if(!p) return;
+      const existing = state.cart.find(x=>x.id===id);
+      if(existing){ existing.qty = Math.min(existing.qty+qty, 99); }
+      else{ state.cart.push({id:p.id, name:p.name, price:p.price, img:p.img, qty}); }
+      saveCart(); renderCart(); toast('Added to cart');
+    }
+
+    function removeFromCart(id){
+      state.cart = state.cart.filter(x=>x.id!==id);
+      saveCart(); renderCart();
+    }
+
+    function changeQty(id, delta){
+      const it = state.cart.find(x=>x.id===id);
+      if(!it) return;
+      it.qty = Math.max(1, Math.min(99, it.qty+delta));
+      saveCart(); renderCart();
+    }
+
+    function renderCart(){
+      el('#cartCount').textContent = cartCount();
+      const list = el('#cartList');
+      if(state.cart.length===0){
+        list.innerHTML = `<p class="small muted">Your cart is empty.</p>`;
+      } else {
+        // list.innerHTML = state.cart.map(it=>`
+        //   <div class="item">
+        //     <img src="${it.img}" alt="${it.name}" style="width:64px">
+        //     `;
+      }}
+      </script>   
+     </body>
+        </html>

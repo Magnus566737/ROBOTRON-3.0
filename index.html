@@ -1,0 +1,1336 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ROBOTRON 3.0 - School Robotics Event</title>
+
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+
+  <!-- Font Awesome 4.7 -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+
+  <!-- Tech Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;800&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet" />
+
+  <!-- Slick Slider CSS -->
+  <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.css" />
+  <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick-theme.min.css" />
+
+  <style>
+    :root {
+      /* New Color Palette */
+      --bg-main: #181328;
+      --bg-card: #201a3a;
+      --accent-cyan: #3ad9e2;
+      --accent-pink: #fd6fff;
+      --accent-pink-strong: #ea00ff;
+      --txt-main: #ffffff;
+      --txt-secondary: #d0d0d0;
+
+      /* Legacy variables for compatibility */
+      --bg-0: #181328;
+      --bg-1: #181328;
+      --bg-2: #201a3a;
+      --txt: #ffffff;
+      --muted: #d0d0d0;
+      --primary: #3ad9e2;
+      --primary-2: #3ad9e2;
+      --accent: #ea00ff;
+      --danger: #ff4d6d;
+      --glass: rgba(255, 255, 255, .06);
+      --glass-strong: rgba(255, 255, 255, .09);
+      --grad-1: linear-gradient(135deg, var(--accent-pink) 0%, var(--accent-pink-strong) 100%);
+      --grad-2: linear-gradient(135deg, #201a3a 0%, #181328 100%);
+      --border-grad: linear-gradient(90deg, var(--accent-cyan), var(--accent-pink-strong));
+      --ring-shadow: 0 0 0 1px rgba(58, 217, 226, .25), 0 0 24px rgba(58, 217, 226, .15);
+      --card-shadow: 0 8px 30px rgba(0, 0, 0, .35);
+      --btn-grad: linear-gradient(90deg, var(--accent-pink), var(--accent-pink-strong));
+      --heading-underline: linear-gradient(90deg, var(--accent-cyan), var(--accent-pink-strong));
+    }
+
+    * { box-sizing: border-box }
+    html, body { height: 100% }
+
+    body {
+      font-family: 'Roboto', sans-serif;
+      color: var(--txt-main);
+      background: var(--bg-main);
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    body::before{
+      content:"";
+      position:fixed;
+      inset:0;
+      background:
+        radial-gradient(1000px 600px at 80% -100px, rgba(108, 92, 231, .30), transparent 60%),
+        radial-gradient(800px 500px at -10% 120%, rgba(0, 229, 255, .25), transparent 60%),
+        linear-gradient(to bottom, rgba(255, 255, 255, .03), rgba(255, 255, 255, .01));
+      pointer-events:none;
+      z-index:-2;
+      filter:blur(.2px);
+    }
+
+    body::after{
+      content:"";
+      position:fixed;
+      inset:0;
+      background-image:
+        linear-gradient(to right, rgba(255,255,255,.06) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(255,255,255,.06) 1px, transparent 1px);
+      background-size:40px 40px;
+      opacity:.05;
+      z-index:-1;
+      animation:gridMove 40s linear infinite;
+    }
+
+    @keyframes gridMove { 0%{transform:translateY(0)} 100%{transform:translateY(40px)} }
+
+    h1,h2,h3,h4,h5,h6 {
+      font-family: 'Orbitron', system-ui, sans-serif;
+      letter-spacing:.5px;
+      color: var(--txt-main);
+    }
+
+    /* NAVBAR */
+    .navbar{
+      background: rgba(24, 19, 40, .6);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(255,255,255,.08);
+      transition: all .3s ease;
+    }
+    .navbar.scrolled{ background: rgba(24,19,40,.85); box-shadow: var(--card-shadow); }
+    .navbar-brand{
+      font-weight:800;
+      letter-spacing:1.2px;
+      color:#fff !important;
+      display:flex;
+      align-items:center;
+      gap:.6rem;
+    }
+    .navbar-brand .brand-accent{
+      width:26px;height:26px;border-radius:6px;background:var(--border-grad);
+      box-shadow:0 0 18px rgba(0,229,255,.35);
+    }
+    .nav-link{ color:var(--txt) !important; opacity:.85; position:relative; font-weight:500; margin:0 7px; }
+    .nav-link:hover{ opacity:1 }
+    .nav-link::after{
+      content:""; position:absolute; left:0; bottom:-6px; height:2px; width:0;
+      background:var(--border-grad); transition:width .25s ease;
+    }
+    .nav-link:hover::after{ width:100% }
+
+    /* SECTIONS */
+    .section{
+      padding:80px 0;
+      background:var(--bg-main);
+      border-top:1px solid rgba(255,255,255,.07);
+      border-bottom:1px solid rgba(255,255,255,.07);
+    }
+    .section.alt{ background: linear-gradient(180deg, var(--bg-main), var(--bg-card)); }
+
+    .section-title{
+      text-align:center;
+      margin-bottom:40px;
+    }
+    .section-title h2{
+      font-size: clamp(1.6rem, 2.2vw, 2.4rem);
+      margin-bottom:10px;
+      color: var(--txt-main);
+      position: relative;
+      padding-bottom: 12px;
+    }
+    .section-title h2::after{
+      content: "";
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 88px;
+      height: 3px;
+      background: var(--heading-underline);
+      border-radius: 999px;
+      box-shadow: 0 0 20px rgba(58, 217, 226, .35);
+    }
+    .title-underline{
+      width:88px; height:3px; margin:10px auto 0;
+      background:var(--heading-underline);
+      border-radius:999px;
+      box-shadow:0 0 20px rgba(58, 217, 226, .35);
+    }
+
+    /* CARDS */
+    .glass-card{
+      background:var(--bg-card);
+      border:1px solid rgba(255,255,255,.12);
+      border-radius:16px;
+      box-shadow:var(--card-shadow);
+      transition: transform .2s, box-shadow .3s, background .2s;
+      overflow:hidden;
+      position:relative;
+      margin:0 6px;
+    }
+    .glass-card:hover{ transform:translateY(-6px); background:var(--bg-card); box-shadow:0 12px 40px rgba(0,0,0,.5); }
+    .card-ring{
+      position:absolute;
+      inset:0;
+      pointer-events:none;
+      background:linear-gradient(180deg,transparent,rgba(255,255,255,.06));
+      mask:radial-gradient(160% 140% at 50% -20%, #0000 40%, #000 41%);
+      opacity:.6;
+    }
+
+    /* BUTTONS */
+    .btn-primary{
+      background: var(--btn-grad);
+      border:0;
+      border-radius:14px;
+      padding:12px 28px;
+      font-weight:700;
+      box-shadow: 0 10px 30px rgba(58, 217, 226, .3), 0 0 20px rgba(234, 0, 255, .2);
+      transition:transform .2s, box-shadow .2s, opacity .2s;
+      color: var(--txt-main);
+    }
+    .btn-primary:hover{ transform:translateY(-2px); box-shadow: 0 18px 44px rgba(58, 217, 226, .4), 0 0 30px rgba(234, 0, 255, .3); opacity:.95; }
+    .btn-outline-primary{
+      border-image:var(--border-grad) 1;
+      border-width:2px;
+      border-style:solid;
+      color:var(--txt);
+      border-radius:12px;
+      font-weight:600;
+    }
+    .btn-outline-primary:hover{ background:var(--glass) }
+
+    /* ===== BANNER (BACKGROUND SLIDER ONLY) ===== */
+    .banner{
+      min-height:92vh;
+      display:flex;
+      align-items:center;
+      position:relative;
+      overflow:hidden;
+      border-bottom:1px solid rgba(255,255,255,.06);
+      background: transparent;
+    }
+
+    .banner-bg-slider{
+      position:absolute;
+      inset:0;
+      z-index:0;
+    }
+    .banner-bg-slider .bg-slide{
+      height:92vh;
+      background-size:cover;
+      background-position:center;
+      background-repeat:no-repeat;
+      transform:scale(1.04);
+    }
+
+    .banner-overlay{
+      position:absolute;
+      inset:0;
+      z-index:1;
+      background:
+        linear-gradient(180deg, rgba(24,19,40,.55), rgba(24,19,40,.88)),
+        radial-gradient(800px 400px at 70% 10%, rgba(58,217,226,.14), transparent 60%),
+        radial-gradient(700px 380px at 20% 90%, rgba(234,0,255,.12), transparent 65%);
+      box-shadow: inset 0 -140px 200px -90px rgba(0,0,0,.75);
+    }
+
+    .banner .container{ position:relative; z-index:2; }
+    .banner-content{ max-width:900px; margin:0 auto; text-align:center }
+
+    .banner h1{
+      font-size:clamp(2.2rem,4vw,4rem);
+      line-height:1.05;
+      margin-bottom:1rem;
+      background: linear-gradient(135deg, var(--accent-pink), var(--accent-pink-strong), var(--accent-cyan));
+      -webkit-background-clip:text;
+      background-clip:text;
+      color:transparent;
+      text-shadow:0 0 35px rgba(58,217,226,.3);
+    }
+    .banner p{ color:var(--muted); font-size:clamp(1rem,1.3vw,1.2rem); margin-bottom:1.5rem; }
+
+    .hero-subtitle-badge {
+      margin-top: 10px;
+      margin-bottom: 20px;
+      display: inline-block;
+      padding: 6px 22px;
+      border-radius: 999px;
+      background: rgba(0, 0, 0, 0.35);
+      border: 1px solid rgba(0, 255, 255, 0.6);
+      box-shadow: 0 0 12px rgba(0, 255, 255, 0.25);
+    }
+    .hero-subtitle-badge span {
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      color: #f5f9ff;
+    }
+
+    .countdown{ display:flex; justify-content:center; gap:16px; margin:20px 0 28px }
+    .cd-box{
+      min-width:96px;
+      background:var(--bg-card);
+      border:1px solid rgba(58,217,226,.3);
+      border-radius:14px;
+      padding:12px 10px;
+      box-shadow: 0 0 0 1px rgba(58, 217, 226, .25), 0 0 24px rgba(58, 217, 226, .15);
+    }
+    .cd-box span{
+      display:block;
+      font-family:'Orbitron';
+      font-weight:800;
+      font-size:clamp(1.6rem,3.2vw,2.6rem);
+      color:var(--txt-main);
+      line-height:1;
+      text-shadow:0 6px 28px rgba(58,217,226,.3);
+    }
+    .cd-label{ font-size:.85rem; color:var(--muted); letter-spacing:.8px; text-transform:uppercase; }
+
+    /* slick dots (banner) */
+    .banner-bg-slider .slick-dots{
+      bottom:22px;
+      z-index:3;
+    }
+    .banner-bg-slider .slick-dots li button:before{
+      font-size:10px;
+      opacity:.55;
+      color:#dff6ff;
+    }
+    .banner-bg-slider .slick-dots li.slick-active button:before{
+      opacity:1;
+      color: var(--accent);
+    }
+
+    /* CATEGORIES */
+    .category-card .category-img{ height:220px; overflow:hidden }
+    .category-card .category-img img{
+      width:100%; height:100%; object-fit:cover; transition:transform .5s
+    }
+    .category-card:hover .category-img img{ transform:scale(1.06) }
+    .category-content{ padding:18px }
+    .category-content h3{ font-size:1.15rem; margin:0 0 6px }
+    .category-price{
+      color:var(--accent);
+      font-weight:800;
+      letter-spacing:.4px;
+      margin-bottom:10px
+    }
+
+    /* INTRO */
+    .intro-rich{
+      max-width:900px;
+      margin:0 auto 28px;
+      color:var(--muted);
+      text-align:center;
+    }
+    .key-point{
+      padding:20px;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      text-align:center;
+    }
+    .key-point i{ font-size:1.8rem; color:var(--primary-2); margin-bottom:8px }
+
+    /* ===== SPONSORS (PRO LOOK) ===== */
+    .sponsors-section{ padding:80px 0; }
+    .sponsors-wrap{
+      background: rgba(255,255,255,.03);
+      border: 1px solid rgba(255,255,255,.08);
+      border-radius: 24px;
+      padding: 26px;
+      box-shadow: 0 20px 60px rgba(0,0,0,.35);
+    }
+
+    .sponsor-panel{
+      background: var(--bg-card);
+      border: 1px solid rgba(255,255,255,.10);
+      border-radius: 22px;
+      padding: 22px;
+      height: 100%;
+      position: relative;
+      overflow: hidden;
+    }
+    .sponsor-panel::before{
+      content:"";
+      position:absolute;
+      inset:-1px;
+      background:
+        radial-gradient(600px 300px at 20% 10%, rgba(58,217,226,.12), transparent 60%),
+        radial-gradient(500px 260px at 80% 90%, rgba(234,0,255,.10), transparent 65%);
+      pointer-events:none;
+    }
+    .sponsor-panel > *{ position:relative; z-index:1; }
+
+    .sponsor-panel-title{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:14px;
+      margin-bottom:14px;
+    }
+    .sponsor-panel-title h4{
+      margin:0;
+      font-size: 1.1rem;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+    .sponsor-panel-title .mini-line{
+      flex:1;
+      height:1px;
+      background: linear-gradient(90deg, rgba(58,217,226,.5), rgba(234,0,255,.4));
+      opacity:.6;
+    }
+
+    .premium-card{
+      border: 1px solid rgba(58,217,226,.35);
+      box-shadow: 0 0 0 1px rgba(58,217,226,.18), 0 0 60px rgba(0,229,255,.22);
+      text-align:center;
+      padding: 30px 22px;
+    }
+    .premium-card img{
+      max-width: 220px;
+      height:auto;
+      margin: 0 auto 14px;
+      display:block;
+    }
+    .premium-card h3{
+      font-size: 30px;
+      margin: 6px 0 6px;
+      font-weight: 800;
+    }
+    .premium-card .tier{
+      display:inline-block;
+      margin-top: 6px;
+      padding: 7px 14px;
+      border-radius: 999px;
+      letter-spacing: .22em;
+      text-transform: uppercase;
+      font-size: 12px;
+      color: #dffcff;
+      border: 1px solid rgba(58,217,226,.35);
+      background: rgba(0,229,255,.08);
+    }
+
+    .tier-block{
+      border-radius: 18px;
+      padding: 16px;
+      border: 1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.03);
+    }
+    .tier-block.gold{
+      border-color: rgba(255,215,0,.35);
+      box-shadow: 0 0 40px rgba(255,215,0,.10);
+    }
+    .tier-block.silver{
+      border-color: rgba(207,216,227,.35);
+    }
+    .tier-block.bronze{
+      border-color: rgba(205,127,50,.35);
+    }
+
+    .tier-label{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      margin-bottom: 12px;
+    }
+    .tier-label span{
+      font-weight: 900;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      font-size: 12px;
+      opacity: .95;
+    }
+    .tier-label .chip{
+      font-size: 11px;
+      padding: 5px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.18);
+      background: rgba(255,255,255,.06);
+    }
+
+    .sponsor-item{
+      display:flex;
+      align-items:center;
+      gap:14px;
+      padding: 14px 14px;
+      border-radius: 16px;
+      background: rgba(255,255,255,.02);
+      border: 1px solid rgba(255,255,255,.10);
+      transition: transform .18s ease, box-shadow .18s ease;
+    }
+    .sponsor-item:hover{
+      transform: translateY(-3px);
+      box-shadow: 0 14px 34px rgba(0,0,0,.28);
+    }
+    .sponsor-item img{
+      width: 64px;
+      height: 64px;
+      object-fit: contain;
+      border-radius: 12px;
+      background: rgba(0,0,0,.18);
+      padding: 8px;
+    }
+    .sponsor-item .meta{ flex:1; text-align:left; }
+    .sponsor-item .meta .name{
+      margin:0;
+      font-weight: 800;
+      color: #fff;
+    }
+    .sponsor-item .meta .desc{
+      margin: 2px 0 0;
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .sponsor-grid-2{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    @media (max-width: 991.98px){
+      .sponsor-grid-2{ grid-template-columns: 1fr; }
+      .sponsors-wrap{ padding: 18px; }
+    }
+
+    /* WINNERS */
+    .winner-gallery{
+      display:grid;
+      gap:18px;
+      grid-template-columns:repeat(auto-fit, minmax(240px, 1fr));
+    }
+    .winner-img{ height:200px; overflow:hidden }
+    .winner-img img{ width:100%; height:100%; object-fit:cover; transition:transform .5s }
+    .winner-card:hover .winner-img img{ transform:scale(1.05) }
+    .winner-info{ padding:14px; text-align:center }
+    .winner-info h4{ margin:0 0 4px }
+    .winner-info p{ color:var(--primary-2); margin:0; font-weight:600 }
+
+    /* POWERED BY */
+    .powered-logos{
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      gap:36px;
+      flex-wrap:wrap;
+      margin-top:18px;
+    }
+    .powered-logo{ height:130px; filter:brightness(.95) invert(.02) }
+    .powered-logo img{ height:100%; object-fit:contain; }
+
+    /* Slick overrides */
+    .slick-prev:before, .slick-next:before { color:#dff6ff }
+    .slick-dots li button:before { color:#aec7da }
+    .slick-dots li.slick-active button:before { color:var(--accent) }
+
+    /* Footer */
+    footer{
+      background:var(--bg-main);
+      border-top:1px solid rgba(255,255,255,.08);
+      color:var(--txt-secondary);
+      padding:28px 0;
+      text-align:center
+    }
+
+    /* Scrollbar */
+    ::-webkit-scrollbar{ width:10px }
+    ::-webkit-scrollbar-thumb{ background:linear-gradient(180deg, var(--primary), var(--primary-2)); border-radius:8px }
+
+    @media (max-width:768px){
+      .countdown{ gap:10px }
+      .cd-box{ min-width:78px }
+    }
+
+    /* Edition pill tabs */
+    .edition-tabs-pill{ background:#fff; border-radius:40px; overflow:hidden; box-shadow:0 2px 8px rgba(0,0,0,.15); }
+    .edition-tabs-pill .edition-tab{ border:none; background:transparent; padding:10px 24px; font-weight:600; color:#0d3c61; cursor:pointer; transition:all .3s; }
+    .edition-tabs-pill .edition-tab.active{ background:#1976d2; color:#fff; }
+    .edition-tabs-pill .edition-tab:not(.active):hover{ background:rgba(25,118,210,.1); }
+
+    .testimonials-section{ background:var(--bg-main); border-top:1px solid rgba(255,255,255,.07) }
+    .video-card{ border-radius:16px; overflow:hidden; border:1px solid rgba(255,255,255,.12); }
+    .video-wrap{ position:relative; width:100%; padding-top:56.25%; background:#0e1a31; }
+    .video-wrap iframe{ position:absolute; inset:0; width:100%; height:100%; border:0; border-radius:0; }
+    .video-info{ padding:14px 16px }
+    .video-info h5{ color:#e6f1ff; font-weight:800 }
+  </style>
+</head>
+
+<body>
+
+  <!-- Header/Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+    <div class="container">
+      <a class="navbar-brand" href="#">
+        <span class="brand-accent"></span> ROBOTRON
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item"><a class="nav-link active" href="#"><i class="fa fa-home"></i> Home</a></li>
+          <li class="nav-item"><a class="nav-link" href="team.html"><i class="fa fa-users"></i> Team</a></li>
+          <li class="nav-item"><a class="nav-link" href="categories.html"><i class="fa fa-th-list"></i> Categories</a></li>
+          <li class="nav-item"><a class="nav-link" href="#team"><i class="fa fa-photo"></i> Gallery</a></li>
+          <li class="nav-item"><a class="nav-link" href="contact.html"><i class="fa fa-envelope"></i> Contact</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Banner Section (Background slider only) -->
+  <section class="banner">
+    <!-- Background slider -->
+    <div class="banner-bg-slider">
+      <!-- Change these images as you want -->
+      <div class="bg-slide" style="background-image:url('./bannertest.jpg')"></div>
+      <div class="bg-slide" style="background-image:url('./banner2.avif')"></div>
+      <div class="bg-slide" style="background-image:url('./banner3.avif')"></div>
+    </div>
+
+    <!-- Overlay -->
+    <div class="banner-overlay"></div>
+
+    <!-- Fixed content -->
+    <div class="container">
+      <div class="banner-content">
+        <h1>ROBOTRON 3.0</h1>
+        <div class="hero-subtitle-badge">
+          <span>Ignite the Innovation</span>
+        </div>
+
+        <div class="countdown">
+          <div class="cd-box"><span id="days">00</span><div class="cd-label">Days</div></div>
+          <div class="cd-box"><span id="hours">00</span><div class="cd-label">Hours</div></div>
+          <div class="cd-box"><span id="minutes">00</span><div class="cd-label">Minutes</div></div>
+          <div class="cd-box"><span id="seconds">00</span><div class="cd-label">Seconds</div></div>
+        </div>
+
+        <a href="registration.html" class="btn btn-primary btn-lg">Register Now</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Categories Section -->
+  <section id="categories" class="section alt categories-section">
+    <div class="container">
+      <div class="section-title">
+        <h2>Competition Categories</h2>
+        <div class="title-underline"></div>
+      </div>
+
+      <div class="row" id="homeCats"></div>
+    </div>
+  </section>
+
+  <style>
+    /* ===== ABOUT SECTION (IMPROVED) ===== */
+.about-section { position: relative; }
+
+.about-panel{
+  background: rgba(255,255,255,.03);
+  border: 1px solid rgba(255,255,255,.10);
+  border-radius: 22px;
+  padding: 28px 26px;
+  box-shadow: 0 20px 60px rgba(0,0,0,.35);
+  position: relative;
+  overflow: hidden;
+}
+
+.about-panel::before{
+  content:"";
+  position:absolute;
+  inset:-1px;
+  background:
+    radial-gradient(700px 320px at 20% 10%, rgba(58,217,226,.14), transparent 60%),
+    radial-gradient(600px 320px at 85% 90%, rgba(234,0,255,.12), transparent 65%);
+  pointer-events:none;
+}
+
+.about-panel > *{ position:relative; z-index:1; }
+
+.about-header{ margin-bottom: 12px; }
+.about-title{
+  margin: 0 0 10px;
+  font-size: clamp(1.5rem, 2.2vw, 2.2rem);
+  letter-spacing: .06em;
+}
+
+.about-lead{
+  color: var(--muted);
+  font-size: 1rem;
+  line-height: 1.75;
+  margin: 14px 0 16px;
+}
+
+.about-highlight{
+  display:flex;
+  gap: 12px;
+  align-items:flex-start;
+  padding: 14px 14px;
+  border-radius: 16px;
+  border: 1px solid rgba(58,217,226,.20);
+  background: rgba(0,229,255,.06);
+  margin: 10px 0 16px;
+}
+
+.about-highlight i{
+  color: var(--accent-cyan);
+  font-size: 18px;
+  margin-top: 2px;
+}
+
+.about-highlight h6{
+  margin: 0 0 2px;
+  font-weight: 800;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  font-size: 12px;
+}
+
+.about-highlight p{
+  margin: 0;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.about-list{
+  list-style: none;
+  padding: 0;
+  margin: 0 0 18px;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+}
+
+.about-list li{
+  display:flex;
+  gap: 10px;
+  align-items:flex-start;
+  color: #e9efff;
+  background: rgba(255,255,255,.02);
+  border: 1px solid rgba(255,255,255,.08);
+  padding: 10px 12px;
+  border-radius: 14px;
+}
+
+.about-list li i{
+  color: var(--accent-cyan);
+  margin-top: 2px;
+}
+
+.about-footer{
+  margin-top: 4px;
+  padding-top: 14px;
+  border-top: 1px solid rgba(255,255,255,.08);
+}
+
+.about-muted{
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+/* RIGHT SIDE */
+.about-stats{
+  background: rgba(255,255,255,.02);
+  border: 1px solid rgba(255,255,255,.10);
+  border-radius: 22px;
+  padding: 22px;
+  box-shadow: 0 20px 60px rgba(0,0,0,.28);
+  position: relative;
+  overflow: hidden;
+}
+
+.about-stats::before{
+  content:"";
+  position:absolute;
+  inset:-1px;
+  background:
+    radial-gradient(650px 260px at 70% 15%, rgba(234,0,255,.10), transparent 60%),
+    radial-gradient(600px 260px at 25% 85%, rgba(58,217,226,.10), transparent 65%);
+  pointer-events:none;
+}
+
+.about-stats > *{ position:relative; z-index:1; }
+
+.stat-card{
+  display:flex;
+  gap: 12px;
+  align-items:center;
+  padding: 16px 14px;
+  border-radius: 18px;
+  background: var(--bg-card);
+  border: 1px solid rgba(255,255,255,.10);
+  box-shadow: 0 10px 26px rgba(0,0,0,.25);
+  transition: transform .18s ease, box-shadow .18s ease;
+  height: 100%;
+}
+
+.stat-card:hover{
+  transform: translateY(-3px);
+  box-shadow: 0 16px 36px rgba(0,0,0,.35);
+}
+
+.stat-icon{
+  width: 44px;
+  height: 44px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border-radius: 14px;
+  border: 1px solid rgba(58,217,226,.25);
+  background: rgba(0,229,255,.06);
+}
+
+.stat-icon i{
+  color: var(--accent-cyan);
+  font-size: 18px;
+}
+
+.stat-meta{ line-height: 1; }
+.stat-label{
+  margin: 0 0 6px;
+  color: var(--muted);
+  font-size: 12px;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+}
+
+.stat-value{
+  margin: 0;
+  font-family: 'Orbitron', sans-serif;
+  font-weight: 800;
+  font-size: clamp(20px, 2.3vw, 30px);
+  letter-spacing: .03em;
+  color: #ffffff;
+  text-shadow: 0 10px 30px rgba(58,217,226,.14);
+}
+
+.stats-note{
+  margin-top: 14px;
+  display:flex;
+  gap: 10px;
+  align-items:center;
+  color: var(--muted);
+  font-size: 12px;
+  border-top: 1px solid rgba(255,255,255,.08);
+  padding-top: 12px;
+}
+.stats-note i{ color: var(--accent-cyan); }
+
+/* responsive tweaks */
+@media (max-width: 991.98px){
+  .about-panel, .about-stats{ padding: 18px; }
+}
+
+  </style>
+
+  <!-- Introduction Section -->
+<section id="about" class="section about-section">
+  <div class="container">
+    <div class="row g-4 align-items-stretch">
+
+      <!-- LEFT: ABOUT CONTENT -->
+      <div class="col-lg-7">
+        <div class="about-panel h-100">
+          <div class="about-header">
+            <h2 class="about-title">INTRODUCING ROBOTRON 3.0</h2>
+            <div class="title-underline"></div>
+          </div>
+
+          <p class="about-lead">
+            ROBOTRON is Karachi's flagship robotics and innovation competition designed for students from
+            schools, colleges, and universities—built to accelerate STEM education and nurture Pakistan’s
+            future engineers, scientists, and innovators.
+          </p>
+
+          <div class="about-highlight">
+            <i class="fa fa-bullseye"></i>
+            <div>
+              <h6>2025 Theme</h6>
+              <p>Future Robotics (Space &amp; Smart Cities) — aligned with Pakistan’s national priorities.</p>
+            </div>
+          </div>
+
+          <ul class="about-list">
+            <li><i class="fa fa-check"></i> Space exploration &amp; satellite technology</li>
+            <li><i class="fa fa-check"></i> Smart city infrastructure &amp; automation</li>
+            <li><i class="fa fa-check"></i> Sustainable urban planning through robotics</li>
+            <li><i class="fa fa-check"></i> Advanced communication &amp; navigation systems</li>
+          </ul>
+
+          <div class="about-footer">
+            <p class="about-muted mb-0">
+              Robotron 2.0 saw participation from 27+ institutions, 105+ teams and 6 sponsors.
+              Robotron 2025 builds on this momentum with a bigger scope—focused on promoting STEM education in Pakistan.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- RIGHT: KPI CARDS -->
+      <div class="col-lg-5">
+        <div class="about-stats h-100">
+          <div class="row g-3">
+
+            <div class="col-6">
+              <div class="stat-card">
+                <div class="stat-icon"><i class="fa fa-rocket"></i></div>
+                <div class="stat-meta">
+                  <p class="stat-label">Teams</p>
+                  <p class="stat-value">1000</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-6">
+              <div class="stat-card">
+                <div class="stat-icon"><i class="fa fa-android"></i></div>
+                <div class="stat-meta">
+                  <p class="stat-label">Participants</p>
+                  <p class="stat-value">1000</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-6">
+              <div class="stat-card">
+                <div class="stat-icon"><i class="fa fa-code"></i></div>
+                <div class="stat-meta">
+                  <p class="stat-label">Categories</p>
+                  <p class="stat-value">1000</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-6">
+              <div class="stat-card">
+                <div class="stat-icon"><i class="fa fa-lightbulb-o"></i></div>
+                <div class="stat-meta">
+                  <p class="stat-label">Innovations</p>
+                  <p class="stat-value">1000</p>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <div class="stats-note">
+            <i class="fa fa-info-circle"></i>
+            <span>Update these numbers anytime — design stays consistent.</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+  <!-- Sponsors Section (Professional 2-column) -->
+  <section class="section sponsors-section">
+    <div class="container">
+      <div class="section-title">
+        <h2>Our Sponsors</h2>
+        <div class="title-underline"></div>
+      </div>
+
+      <div class="sponsors-wrap">
+        <div class="row g-4 align-items-stretch">
+
+          <!-- LEFT: PREMIUM -->
+          <div class="col-lg-5">
+            <div class="sponsor-panel premium-card h-100">
+              <div class="sponsor-panel-title">
+                <h4>Premium Partner</h4>
+                <div class="mini-line"></div>
+              </div>
+
+              <img src="./SUPARCO_Pakistan_Logo.png" alt="SUPARCO">
+              <h3>SUPARCO</h3>
+              <div class="tier">Premium Partner</div>
+
+              <p class="mt-3 mb-0" style="color:var(--muted); font-size:13px;">
+                Supporting Pakistan’s future innovators in Robotics, Space & Smart Cities.
+              </p>
+            </div>
+          </div>
+
+          <!-- RIGHT: TIERS -->
+          <div class="col-lg-7">
+            <div class="sponsor-panel h-100">
+              <div class="sponsor-panel-title">
+                <h4>Sponsor Tiers</h4>
+                <div class="mini-line"></div>
+              </div>
+
+              <!-- GOLD -->
+              <div class="tier-block gold mb-3">
+                <div class="tier-label">
+                  <span style="color:gold;">Gold Sponsors</span>
+                  <div class="chip">Top Tier</div>
+                </div>
+
+                <div class="sponsor-grid-2">
+                  <div class="sponsor-item">
+                    <img src="./sponsors1.jpeg" alt="AI Pioneers">
+                    <div class="meta">
+                      <p class="name">AI Pioneers</p>
+                      <p class="desc">Innovation & AI enablement</p>
+                    </div>
+                  </div>
+
+                  <div class="sponsor-item">
+                    <img src="./sponsors5.jpeg" alt="Nizamuddin Group">
+                    <div class="meta">
+                      <p class="name">Nizamuddin Group</p>
+                      <p class="desc">Industry partner</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- SILVER -->
+              <div class="tier-block silver mb-3">
+                <div class="tier-label">
+                  <span style="color:#cfd8e3;">Silver Sponsor</span>
+                  <div class="chip">Support Tier</div>
+                </div>
+
+                <div class="sponsor-item">
+                  <img src="./sponsors2.png" alt="Innovate Solutions">
+                  <div class="meta">
+                    <p class="name">Innovate Solutions</p>
+                    <p class="desc">STEM learning support</p>
+                  </div>
+                </div>
+              </div>
+
+              <!-- BRONZE -->
+              <div class="tier-block bronze">
+                <div class="tier-label">
+                  <span style="color:#cd7f32;">Bronze Sponsor</span>
+                  <div class="chip">Community Tier</div>
+                </div>
+
+                <div class="sponsor-item">
+                  <img src="./sponsors3.png" alt="Future Robotics">
+                  <div class="meta">
+                    <p class="name">Future Robotics</p>
+                    <p class="desc">Makers & robotics support</p>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Winners Section -->
+  <section class="section alt winners-section">
+    <div class="container">
+      <div class="section-title">
+        <h2>Win Cash Prizes</h2>
+        <p class="text-muted">Previous Year Winners Gallery</p>
+        <div class="title-underline"></div>
+      </div>
+
+      <!-- Edition Tabs -->
+      <div class="d-flex flex-wrap gap-2 justify-content-center mb-3 edition-tabs">
+        <div class="edition-tabs-pill d-inline-flex">
+          <button class="edition-tab active" data-edition="robotron2">Robotron 2</button>
+          <button class="edition-tab" data-edition="robotron1">Robotron 1</button>
+        </div>
+      </div>
+
+      <!-- Render target -->
+      <div id="winnerGallery" class="winner-gallery"></div>
+
+      <div class="text-center mt-4">
+        <button id="showMoreWinners" class="btn btn-primary">Show More Winners</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- TESTIMONIALS -->
+  <section class="section testimonials-section">
+    <div class="container">
+      <div class="row g-4 align-items-start">
+        <!-- Left -->
+        <div class="col-lg-4">
+          <div class="section-title mb-2">
+            <h2>What Participants Say</h2>
+            <div class="title-underline"></div>
+          </div>
+          <p class="text-muted">Robotron isn’t just a competition—it’s a launchpad. Hear from teams who
+            refined their builds, grew their networks, and took home real-world skills.</p>
+        </div>
+
+        <!-- Right: video testimonials -->
+        <div class="col-lg-8">
+          <div class="testimonial-slider">
+            <div class="glass-card video-card">
+              <div class="video-wrap">
+                <iframe src="./assets/testi1.MP4" title="Team Innovators — Robotron Experience" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe>
+              </div>
+              <div class="video-info">
+                <h5 class="mb-1">Team Innovators</h5>
+                <p class="small text-muted mb-1">Line Following Robot • Finalists</p>
+                <p class="mb-0">“We learned more in 2 days than a whole semester of labs.”</p>
+              </div>
+            </div>
+
+            <div class="glass-card video-card">
+              <div class="video-wrap">
+                <iframe src="./assets/testi2.mp4" title="Tech Wizards — Robotron Journey" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe>
+              </div>
+              <div class="video-info">
+                <h5 class="mb-1">Tech Wizards</h5>
+                <p class="small text-muted mb-1">Robo Sumo • Champions</p>
+                <p class="mb-0">“Incredible community, tight rules, and world-class judging.”</p>
+              </div>
+            </div>
+
+            <div class="glass-card video-card">
+              <div class="video-wrap">
+                <iframe src="./assets/Dr Abdul Bari video.mp4" title="Future Engineers — Highlights" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe>
+              </div>
+              <div class="video-info">
+                <h5 class="mb-1">Future Engineers</h5>
+                <p class="small text-muted mb-1">Maze Solver • Runners-up</p>
+                <p class="mb-0">“Robotron pushed us to optimize code and hardware like pros.”</p>
+              </div>
+            </div>
+            <div class="glass-card video-card">
+              <div class="video-wrap">
+                <iframe src="./assets/testimonial 2 Robotron 2.0.mp4" title="Future Engineers — Highlights" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe>
+              </div>
+              <div class="video-info">
+                <h5 class="mb-1">Future Engineers</h5>
+                <p class="small text-muted mb-1">Maze Solver • Runners-up</p>
+                <p class="mb-0">“Robotron pushed us to optimize code and hardware like pros.”</p>
+              </div>
+            </div>
+          </div><!-- /testimonial-slider -->
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Powered By Section -->
+  <section class="section powered-section">
+    <div class="container">
+      <div class="section-title"><h2>Powered By</h2><div class="title-underline"></div></div>
+      <div class="powered-logos">
+        <div class="powered-logo"><img src="./tlslogo.png" alt="Organization Logo"></div>
+        <div class="powered-logo"><img src="./sret.png" alt="School Logo"></div>
+      </div>
+    </div>
+  </section>
+
+  <a href="registration.html" class="go-to-reg-btn"><i class="fa fa-shopping-cart"></i></a>
+  <style>
+    .go-to-reg-btn{
+      position:fixed;
+      bottom:24px;
+      right:24px;
+      background:var(--border-grad);
+      color:#fff;
+      font-size:1.4rem;
+      padding:14px 18px;
+      border-radius:50%;
+      box-shadow:0 8px 20px rgba(0,229,255,.25);
+      z-index:1050;
+      transition:transform .2s;
+    }
+    .go-to-reg-btn:hover{ transform:scale(1.1); color:#fff; }
+  </style>
+
+  <!-- Footer -->
+  <footer><div class="container"><p>&copy; 2025 Robotron. Made By SRET</p></div></footer>
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.js"></script>
+  <script src="./scriptmain.js"></script>
+
+  <!-- Load categories for Home -->
+  <script type="module">
+    import { loadCategories, currency } from './js/catData.js';
+
+    const wrap = document.getElementById('homeCats');
+
+    function card(c){
+      return `
+        <div class='col-lg-4 mb-3'>
+          <div class="glass-card category-card">
+            <div class="card-ring"></div>
+            <div class="category-img"><img src="${c.image}" alt="${c.name}"></div>
+            <div class="category-content">
+              <h3>${c.name}</h3>
+              <div class="category-price">Entry Fee: ${currency(c.fee)}</div>
+              <a href="registration.html" class="btn btn-outline-primary select-category" data-id="${c.id}">
+                Register
+              </a>
+            </div>
+          </div>
+        </div>`;
+    }
+
+    const cats = await loadCategories();
+    wrap.innerHTML = cats.map(card).join('');
+
+    // If you want slick for categories, uncomment below
+    // if (typeof $ === 'function' && $(wrap).slick) {
+    //   $(wrap).slick({
+    //     dots:true, infinite:true, speed:350, slidesToShow:3, slidesToScroll:1, autoplay:true, autoplaySpeed:2500,
+    //     responsive:[{breakpoint:992,settings:{slidesToShow:2}},{breakpoint:768,settings:{slidesToShow:1}}]
+    //   });
+    // }
+
+    // Click → store selected category in localStorage (by id only)
+    document.addEventListener('click', (e)=>{
+      const a = e.target.closest('.select-category');
+      if(!a) return;
+      e.preventDefault();
+      const id = a.dataset.id;
+      localStorage.setItem('robotronSelected', JSON.stringify({ id }));
+      window.location.href = 'registration.html';
+    });
+  </script>
+
+  <script>
+    // Navbar scroll effect
+    $(window).on('scroll', function(){
+      if($(this).scrollTop()>50) $('.navbar').addClass('scrolled');
+      else $('.navbar').removeClass('scrolled');
+    });
+
+    // Banner background slider (text stays fixed)
+    $(function(){
+      $('.banner-bg-slider').slick({
+        arrows: false,
+        dots: true,
+        fade: true,
+        speed: 900,
+        autoplay: true,
+        autoplaySpeed: 3500,
+        pauseOnHover: false,
+        pauseOnFocus: false
+      });
+
+      // Testimonials slider
+      $('.testimonial-slider').slick({
+        dots:true,
+        infinite:true,
+        speed:350,
+        slidesToShow:2,
+        slidesToScroll:1,
+        autoplay:true,
+        autoplaySpeed:3500,
+        responsive:[{breakpoint:992,settings:{slidesToShow:1}}]
+      });
+    });
+
+    // Countdown
+    function updateCountdown(){
+      const eventDate = new Date("Jan 22, 2026 00:00:00").getTime();
+      const now = Date.now();
+      const diff = eventDate - now;
+
+      const days = Math.floor(diff/86400000);
+      const hours = Math.floor((diff%86400000)/3600000);
+      const minutes = Math.floor((diff%3600000)/60000);
+      const seconds = Math.floor((diff%60000)/1000);
+
+      if(days>=0) document.getElementById("days").textContent = String(days).padStart(2,'0');
+      if(hours>=0) document.getElementById("hours").textContent = String(hours).padStart(2,'0');
+      if(minutes>=0) document.getElementById("minutes").textContent = String(minutes).padStart(2,'0');
+      if(seconds>=0) document.getElementById("seconds").textContent = String(seconds).padStart(2,'0');
+    }
+    updateCountdown();
+    setInterval(updateCountdown,1000);
+
+    // Winners data & tabs
+    const WINNERS = {
+      robotron2: [
+        { team:"Team Innovators", category:"Line Following Robot", img:"https://images.unsplash.com/photo-1544717305-2782549b5136?q=80&w=2080&auto=format&fit=crop" },
+        { team:"Tech Wizards", category:"Robo Sumo", img:"https://images.unsplash.com/photo-1541178735493-479c1a27ed24?q=80&w=2080&auto=format&fit=crop" },
+        { team:"Future Engineers", category:"Maze Solver", img:"https://images.unsplash.com/photo-1551033406-611cf9a28f67?q=80&w=2080&auto=format&fit=crop" },
+        { team:"Drone Masters", category:"Drone Racing", img:"https://images.unsplash.com/photo-1581094794329-c8112a89af12?q=80&w=2080&auto=format&fit=crop" },
+        { team:"Code Ninjas", category:"Speed Coding", img:"https://images.unsplash.com/photo-1544717305-2782549b5136?q=80&w=2080&auto=format&fit=crop" },
+        { team:"AI Pioneers", category:"AI Challenge", img:"https://images.unsplash.com/photo-1541178735493-479c1a27ed24?q=80&w=2080&auto=format&fit=crop" },
+        { team:"Robo Builders", category:"Innovation Award", img:"https://images.unsplash.com/photo-1544717305-2782549b5136?q=80&w=2080&auto=format&fit=crop" },
+        { team:"Tech Titans", category:"Overall Champions", img:"https://images.unsplash.com/photo-1541178735493-479c1a27ed24?q=80&w=2080&auto=format&fit=crop" }
+      ],
+      robotron1: [
+        { team:"Alpha Bots", category:"Line Following Robot", img:"https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?q=80&w=2080&auto=format&fit=crop" },
+        { team:"Sumo Squad", category:"Robo Sumo", img:"https://images.unsplash.com/photo-1518779578993-ec3579fee39f?q=80&w=2080&auto=format&fit=crop" },
+        { team:"Maze Masters", category:"Maze Solver", img:"https://images.unsplash.com/photo-1554475901-4538ddfbccc2?q=80&w=2080&auto=format&fit=crop" },
+        { team:"Sky Racers", category:"Drone Racing", img:"https://images.unsplash.com/photo-1482192505345-5655af888cc4?q=80&w=2080&auto=format&fit=crop" },
+        { team:"Byte Breakers", category:"Speed Coding", img:"https://images.unsplash.com/photo-1515879218367-8466d910aaa4?q=80&w=2080&auto=format&fit=crop" },
+        { team:"Neural Knights", category:"AI Challenge", img:"https://images.unsplash.com/photo-1549921296-3a6b3e7d23c8?q=80&w=2080&auto=format&fit=crop" },
+        { team:"Spark Makers", category:"Innovation Award", img:"https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=2080&auto=format&fit=crop" },
+        { team:"Circuit Titans", category:"Overall Champions", img:"https://images.unsplash.com/photo-1498098662025-04e60a212db4?q=80&w=2080&auto=format&fit=crop" }
+      ]
+    };
+
+    const gallery = document.getElementById('winnerGallery');
+    const tabButtons = document.querySelectorAll('.edition-tab');
+    const showMoreBtn = document.getElementById('showMoreWinners');
+
+    let currentEdition='robotron2';
+    let renderCount=8;
+    const PAGE_SIZE=8;
+
+    function cardHTML(x){
+      return `<div class="glass-card winner-card">
+        <div class="card-ring"></div>
+        <div class="winner-img"><img src="${x.img}" alt="${x.team}"></div>
+        <div class="winner-info"><h4>${x.team}</h4><p>${x.category}</p></div>
+      </div>`;
+    }
+
+    function renderGallery(){
+      const list = WINNERS[currentEdition]||[];
+      const slice = list.slice(0,renderCount);
+      gallery.innerHTML = slice.map(cardHTML).join('');
+      showMoreBtn.style.display = renderCount >= list.length ? 'none' : '';
+    }
+
+    tabButtons.forEach(btn=>{
+      btn.addEventListener('click',()=>{
+        tabButtons.forEach(b=>b.classList.remove('active'));
+        btn.classList.add('active');
+        currentEdition = btn.dataset.edition;
+        renderCount = PAGE_SIZE;
+        renderGallery();
+      });
+    });
+
+    showMoreBtn.addEventListener('click',()=>{
+      renderCount += PAGE_SIZE;
+      renderGallery();
+    });
+
+    renderGallery();
+  </script>
+</body>
+</html>

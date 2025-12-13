@@ -1,0 +1,981 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>ROBOTRON — Admin Dashboard</title>
+
+  <!-- Bootstrap -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <!-- Font Awesome 4.7 -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"/>
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;800&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet"/>
+
+  <!-- SheetJS (Excel import/export) -->
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+
+  <style>
+    :root{
+      --bg-0:#070b16; --bg-1:#0b1426; --bg-2:#0f1b33;
+      --txt:#e6f1ff; --muted:#9fb3c8;
+      --primary:#6c5ce7; --primary-2:#00e5ff; --accent:#00ff9d;
+      --glass:rgba(255,255,255,.06); --glass-strong:rgba(255,255,255,.09);
+      --border-grad: linear-gradient(90deg,var(--primary-2),var(--primary),var(--accent));
+      --card-shadow: 0 14px 40px rgba(0,0,0,.38);
+    }
+    body{font-family:'Roboto',sans-serif;color:var(--txt);background:var(--bg-0);min-height:100vh;overflow-x:hidden;}
+    body::before{content:"";position:fixed;inset:0;z-index:-2;pointer-events:none;
+      background:
+        radial-gradient(900px 520px at 80% -100px, rgba(108,92,231,.28), transparent 60%),
+        radial-gradient(800px 480px at -10% 120%, rgba(0,229,255,.22), transparent 60%);}
+    body::after{content:"";position:fixed;inset:0;z-index:-1;opacity:.05;pointer-events:none;
+      background-image: linear-gradient(to right, rgba(255,255,255,.06) 1px, transparent 1px),
+                        linear-gradient(to bottom, rgba(255,255,255,.06) 1px, transparent 1px);
+      background-size:40px 40px; animation:move 40s linear infinite;}
+    @keyframes move{from{transform:translateY(0)} to{transform:translateY(40px)}}
+    h1,h2,h3,h4{font-family:'Orbitron',sans-serif}
+
+    .navbar{ background: rgba(7,11,22,.75); backdrop-filter: blur(10px); border-bottom:1px solid rgba(255,255,255,.08); }
+    .navbar-brand{ font-weight:800; letter-spacing:1.2px; color:#fff !important; display:flex; align-items:center; gap:.6rem; }
+    .brand-accent{ width:26px;height:26px;border-radius:6px;background:var(--border-grad); box-shadow:0 0 18px rgba(0,229,255,.35); }
+
+    .glass-card{ background:var(--glass); border:1px solid rgba(255,255,255,.12); border-radius:18px; box-shadow:var(--card-shadow); }
+    .btn-primary{ background:var(--border-grad); border:0; border-radius:12px; font-weight:700; }
+    .btn-outline-light{ border-color: rgba(255,255,255,.25); color:#e6f1ff; border-radius:12px; }
+    .pill{ background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.15); padding:4px 10px; border-radius:999px; font-size:.8rem }
+
+    table{ color:#e6f1ff }
+    thead th{ color:#cfe7ff; border-color: rgba(255,255,255,.12); }
+    tbody td{ border-color: rgba(255,255,255,.08); vertical-align:middle }
+    table, td, th { border: 1px solid #bdc3c7 !important; font-size: 13px; padding: 7px 4px !important; }
+
+    footer{ background:#060a13; color:#9fb3c8; padding:26px 0; text-align:center; margin-top:40px; }
+    .hidden{ display:none !important; }
+
+    /* Sidebar */
+    .layout-wrap{ display:flex; min-height: calc(100vh - 62px); }
+    .sidebar{
+      width:260px; flex:0 0 260px;
+      background: rgba(7,11,22,.65);
+      border-right:1px solid rgba(255,255,255,.10);
+      backdrop-filter: blur(10px);
+      padding:16px;
+      position:sticky; top:0;
+      height: calc(100vh - 62px);
+      overflow:auto;
+    }
+    .side-item{
+      display:flex; align-items:center; gap:10px;
+      padding:10px 12px;
+      border-radius:12px;
+      color:var(--txt);
+      text-decoration:none;
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.03);
+      margin-bottom:10px;
+      cursor:pointer;
+      transition: transform .15s ease, background .2s ease;
+    }
+    .side-item:hover{ transform: translateY(-1px); background: rgba(255,255,255,.06); }
+    .side-item.active{
+      background: rgba(0,229,255,.08);
+      border-color: rgba(0,229,255,.28);
+      box-shadow: 0 0 0 .15rem rgba(0,229,255,.12);
+    }
+
+    .main{
+      flex:1;
+      padding:24px 16px 60px;
+    }
+
+    .search-wrap .form-control{ background:#0e1a31; color:#fff; border:1px solid rgba(255,255,255,.14); border-radius:10px; }
+
+    /* Categories grid */
+    .cat-grid{ display:grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap:14px; }
+    .cat-card{ overflow:hidden; }
+    .cat-img{ height:150px; background:#0e1a31; overflow:hidden; border-bottom:1px solid rgba(255,255,255,.10); }
+    .cat-img img{ width:100%; height:100%; object-fit:cover; }
+    .cat-body{ padding:12px 12px 14px; }
+    .cat-title{ font-weight:800; margin:0; }
+    .cat-meta{ color:var(--muted); font-size:.85rem; }
+    .cat-price{ color:var(--accent); font-weight:900; margin-top:6px; }
+    .cat-desc{ color:#c9d8ea; font-size:.9rem; margin-top:8px; min-height:44px; }
+
+    /* Modal inputs */
+    .form-control, .form-select, textarea.form-control{
+      background:#0e1a31; color:#fff;
+      border:1px solid rgba(255,255,255,.14);
+      border-radius:10px;
+    }
+    .form-control:focus, textarea.form-control:focus{
+      box-shadow:0 0 0 .25rem rgba(0,229,255,.15);
+      border-color:#00e5ff;
+      background:#0f1f3a;
+      color:#fff;
+    }
+    .modal-content{
+      background: linear-gradient(180deg, rgba(11,20,38,.95), rgba(15,27,51,.95));
+      border:1px solid rgba(255,255,255,.12);
+      border-radius:18px;
+      color:var(--txt);
+    }
+    .modal-header, .modal-footer{ border-color: rgba(255,255,255,.10); }
+    .modal-title{ font-family:'Orbitron',sans-serif; }
+    .help-muted{ color: var(--muted); font-size:.9rem; }
+
+    @media (max-width: 992px){
+      .sidebar{ width:220px; flex-basis:220px; }
+    }
+    @media (max-width: 768px){
+      .layout-wrap{ flex-direction:column; }
+      .sidebar{ width:100%; flex-basis:auto; height:auto; position:relative; top:auto; }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- NAV -->
+  <nav class="navbar navbar-expand-lg navbar-dark">
+    <div class="container">
+      <a class="navbar-brand" href="index.html">
+        <span class="brand-accent"></span> ROBOTRON — Admin
+      </a>
+      <div class="d-flex gap-2">
+        <a href="index.html" class="btn btn-outline-light btn-sm"><i class="fa fa-arrow-left"></i> Back to Site</a>
+        <button id="btnSignOut" class="btn btn-outline-light btn-sm hidden"><i class="fa fa-sign-out"></i> Sign out</button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- LOGIN VIEW -->
+  <section id="loginView" class="container" style="max-width:520px; padding:60px 0">
+    <div class="glass-card p-4">
+      <h3 class="mb-1">Admin Login</h3>
+      <p class="help-muted">Use the email & password you created in Firebase Authentication.</p>
+
+      <form id="loginForm" class="mt-3">
+        <div class="mb-3">
+          <label class="form-label">Email</label>
+          <input id="loginEmail" type="email" class="form-control" required>
+        </div>
+        <div class="mb-4">
+          <label class="form-label">Password</label>
+          <input id="loginPassword" type="password" class="form-control" required>
+        </div>
+        <button class="btn btn-primary w-100">Sign in</button>
+      </form>
+      <div id="loginError" class="mt-3 text-danger" style="display:none"></div>
+    </div>
+  </section>
+
+  <!-- DASHBOARD VIEW -->
+  <section id="dashView" class="hidden">
+    <div class="layout-wrap">
+
+      <!-- SIDEBAR -->
+      <aside class="sidebar">
+        <div class="glass-card p-3 mb-3">
+          <div class="pill mb-2">ADMIN PANEL</div>
+          <div class="help-muted mb-0">Manage enquiries, registrations, and categories.</div>
+        </div>
+
+        <div id="navEnq" class="side-item active">
+          <i class="fa fa-inbox"></i>
+          <div>
+            <div style="font-weight:800">Enquiries</div>
+            <div class="help-muted" style="font-size:.82rem">View contact messages</div>
+          </div>
+        </div>
+
+        <div id="navReg" class="side-item">
+          <i class="fa fa-id-card"></i>
+          <div>
+            <div style="font-weight:800">Registrations</div>
+            <div class="help-muted" style="font-size:.82rem">Teams & fees</div>
+          </div>
+        </div>
+
+        <div id="navCat" class="side-item">
+          <i class="fa fa-th-list"></i>
+          <div>
+            <div style="font-weight:800">Add Categories</div>
+            <div class="help-muted" style="font-size:.82rem">Grid / Upload / Download</div>
+          </div>
+        </div>
+
+        <div class="glass-card p-3 mt-3">
+          <div class="help-muted mb-2"><b>Excel format</b> for upload:</div>
+          <div class="help-muted" style="font-size:.85rem; line-height:1.4">
+            Columns: <b>code</b>, <b>title</b>, <b>description</b>, <b>priceRs</b>, <b>imageUrl</b> (optional)
+          </div>
+        </div>
+      </aside>
+
+      <!-- MAIN -->
+      <main class="main container-fluid" style="max-width: 1400px;">
+
+        <!-- Top cards -->
+        <div class="row g-3 mb-3">
+          <div class="col-md-4">
+            <div class="glass-card p-3">
+              <div class="d-flex justify-content-between align-items-center">
+                <div>
+                  <div class="pill mb-1">Enquiries</div>
+                  <h3 id="statEnquiries" class="mb-0">—</h3>
+                </div>
+                <i class="fa fa-inbox" style="font-size:28px; opacity:.8"></i>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="glass-card p-3">
+              <div class="d-flex justify-content-between align-items-center">
+                <div>
+                  <div class="pill mb-1">Registrations</div>
+                  <h3 id="statRegistrations" class="mb-0">—</h3>
+                </div>
+                <i class="fa fa-users" style="font-size:28px; opacity:.8"></i>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="glass-card p-3">
+              <div class="d-flex justify-content-between align-items-center">
+                <div>
+                  <div class="pill mb-1">Total Fees (USD)</div>
+                  <h3 id="statFees" class="mb-0">—</h3>
+                </div>
+                <i class="fa fa-dollar" style="font-size:28px; opacity:.8"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Top Actions Row -->
+        <div class="d-flex flex-wrap gap-2 align-items-center mb-3">
+          <div class="search-wrap d-flex gap-2 flex-wrap" style="flex:1">
+            <input id="searchInput" class="form-control" placeholder="Search name/email/team/category…"/>
+            <button id="btnExport" class="btn btn-outline-light"><i class="fa fa-download"></i> Export CSV</button>
+          </div>
+
+          <!-- Categories actions -->
+          <div id="catActions" class="d-none d-flex gap-2 flex-wrap">
+            <button id="btnAddCategory" class="btn btn-primary"><i class="fa fa-plus"></i> Add Category</button>
+            <button id="btnUploadExcel" class="btn btn-outline-light"><i class="fa fa-upload"></i> Upload Excel</button>
+            <button id="btnDownloadExcel" class="btn btn-outline-light"><i class="fa fa-download"></i> Download Excel</button>
+            <input id="excelInput" type="file" accept=".xlsx,.xls" class="hidden"/>
+          </div>
+        </div>
+
+        <!-- ENQUIRIES -->
+        <section id="viewEnq">
+          <div class="glass-card p-3">
+            <div class="table-responsive">
+              <table class="table table-sm align-middle">
+                <thead>
+                  <tr>
+                    <th>When</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Message</th>
+                  </tr>
+                </thead>
+                <tbody id="tbodyEnquiries"></tbody>
+              </table>
+            </div>
+            <div class="d-flex justify-content-end gap-2">
+              <button id="moreEnq" class="btn btn-outline-light btn-sm"><i class="fa fa-chevron-down"></i> Load more</button>
+            </div>
+          </div>
+        </section>
+
+        <!-- REGISTRATIONS -->
+        <section id="viewReg" class="hidden">
+          <div class="glass-card p-3">
+            <div class="table-responsive">
+              <table class="table table-sm align-middle">
+                <thead>
+                  <tr>
+                    <th>When</th>
+                    <th>Team</th>
+                    <th>Institute</th>
+                    <th>Contact</th>
+                    <th>Email</th>
+                    <th>Members</th>
+                    <th>Categories</th>
+                    <th>Total (USD)</th>
+                  </tr>
+                </thead>
+                <tbody id="tbodyRegistrations"></tbody>
+              </table>
+            </div>
+            <div class="d-flex justify-content-end gap-2">
+              <button id="moreReg" class="btn btn-outline-light btn-sm"><i class="fa fa-chevron-down"></i> Load more</button>
+            </div>
+          </div>
+        </section>
+
+        <!-- CATEGORIES -->
+        <section id="viewCat" class="hidden">
+          <div class="glass-card p-3 mb-3">
+            <div class="d-flex flex-wrap justify-content-between align-items-center gap-2">
+              <div>
+                <h4 class="mb-1">Categories</h4>
+                <div class="help-muted">Saved in Firestore collection: <b>categories</b></div>
+              </div>
+              <div class="pill">Total: <span id="catCount">0</span></div>
+            </div>
+          </div>
+
+          <div id="catGrid" class="cat-grid"></div>
+
+          <div id="catEmpty" class="glass-card p-4 mt-3 hidden" style="text-align:center">
+            <h4 class="mb-2">No Categories Found</h4>
+            <div class="help-muted">Click “Add Category” or upload Excel to add categories.</div>
+          </div>
+        </section>
+
+      </main>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container">
+      <p>&copy; 2025 Robotron. Made By SRET</p>
+    </div>
+  </footer>
+
+  <!-- Add Category Modal -->
+  <div class="modal fade" id="catModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Add Category</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+
+        <div class="modal-body">
+          <div id="catFormError" class="text-danger mb-2 hidden"></div>
+
+          <div class="row g-3">
+            <div class="col-md-6">
+              <label class="form-label">Category Image</label>
+              <input id="catImage" type="file" class="form-control" accept="image/*">
+              <div class="help-muted mt-1">Optional. If selected, it will be uploaded to Firebase Storage.</div>
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label">Category Code</label>
+              <input id="catCode" class="form-control" placeholder="e.g., LF01" />
+              <div class="help-muted mt-1">Unique code (we will save document ID = code).</div>
+            </div>
+
+            <div class="col-md-12">
+              <label class="form-label">Title</label>
+              <input id="catTitle" class="form-control" placeholder="e.g., Line Following Robot" />
+            </div>
+
+            <div class="col-md-12">
+              <label class="form-label">Description</label>
+              <textarea id="catDesc" class="form-control" rows="3" placeholder="Short description..."></textarea>
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label">Price (Rs)</label>
+              <input id="catPrice" type="number" class="form-control" placeholder="e.g., 5000" min="0" />
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label">Preview</label>
+              <div class="glass-card p-2" style="border-radius:14px">
+                <div style="height:120px;border-radius:12px;overflow:hidden;background:#0e1a31;border:1px solid rgba(255,255,255,.12)">
+                  <img id="catPreviewImg" alt="Preview" style="width:100%;height:100%;object-fit:cover;display:none">
+                  <div id="catPreviewEmpty" class="help-muted d-flex align-items-center justify-content-center" style="height:100%">No image selected</div>
+                </div>
+                <div class="mt-2">
+                  <div class="help-muted">Code: <span id="pvCode">—</span></div>
+                  <div class="help-muted">Title: <span id="pvTitle">—</span></div>
+                  <div class="help-muted">Price: <span id="pvPrice">—</span></div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button class="btn btn-outline-light" data-bs-dismiss="modal">Cancel</button>
+          <button id="btnSaveCategory" class="btn btn-primary"><i class="fa fa-save"></i> Save</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+  <!-- Firebase (v12.2.1) + Dashboard logic -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
+    import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
+    import {
+      getFirestore, collection, getCountFromServer, query, orderBy, limit, startAfter, getDocs,
+      doc, setDoc, serverTimestamp, writeBatch
+    } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
+    import {
+      getStorage, ref as sRef, uploadBytes, getDownloadURL
+    } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-storage.js";
+
+    // --- Your Firebase config ---
+    const firebaseConfig = {
+      apiKey: "AIzaSyChGwuGwBV4_n_eK8JUCBOLeshcqKEsgAo",
+      authDomain: "robtron3-d77fe.firebaseapp.com",
+      projectId: "robtron3-d77fe",
+      storageBucket: "robtron3-d77fe.firebasestorage.app",
+      messagingSenderId: "1058046235994",
+      appId: "1:1058046235994:web:0ebc43e531ac14195a0f63",
+      measurementId: "G-96ETYYF7HR"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db   = getFirestore(app);
+    const storage = getStorage(app);
+
+    /* ---------------- UI refs ---------------- */
+    const loginView = document.getElementById('loginView');
+    const dashView  = document.getElementById('dashView');
+    const loginForm = document.getElementById('loginForm');
+    const loginError= document.getElementById('loginError');
+    const btnSignOut= document.getElementById('btnSignOut');
+
+    const statEnquiries = document.getElementById('statEnquiries');
+    const statRegistrations = document.getElementById('statRegistrations');
+    const statFees = document.getElementById('statFees');
+
+    // Sidebar nav
+    const navEnq = document.getElementById('navEnq');
+    const navReg = document.getElementById('navReg');
+    const navCat = document.getElementById('navCat');
+
+    // Views
+    const viewEnq = document.getElementById('viewEnq');
+    const viewReg = document.getElementById('viewReg');
+    const viewCat = document.getElementById('viewCat');
+
+    // Tables
+    const tbodyEnquiries = document.getElementById('tbodyEnquiries');
+    const tbodyRegistrations = document.getElementById('tbodyRegistrations');
+    const moreEnq = document.getElementById('moreEnq');
+    const moreReg = document.getElementById('moreReg');
+
+    // Search/export
+    const searchInput = document.getElementById('searchInput');
+    const btnExport = document.getElementById('btnExport');
+
+    // Categories UI
+    const catActions = document.getElementById('catActions');
+    const btnAddCategory = document.getElementById('btnAddCategory');
+    const btnUploadExcel = document.getElementById('btnUploadExcel');
+    const btnDownloadExcel = document.getElementById('btnDownloadExcel');
+    const excelInput = document.getElementById('excelInput');
+
+    const catGrid = document.getElementById('catGrid');
+    const catEmpty = document.getElementById('catEmpty');
+    const catCount = document.getElementById('catCount');
+
+    // Modal refs
+    const catModalEl = document.getElementById('catModal');
+    const catModal = new bootstrap.Modal(catModalEl);
+    const catFormError = document.getElementById('catFormError');
+
+    const catImage = document.getElementById('catImage');
+    const catCode  = document.getElementById('catCode');
+    const catTitle = document.getElementById('catTitle');
+    const catDesc  = document.getElementById('catDesc');
+    const catPrice = document.getElementById('catPrice');
+    const btnSaveCategory = document.getElementById('btnSaveCategory');
+
+    const catPreviewImg = document.getElementById('catPreviewImg');
+    const catPreviewEmpty = document.getElementById('catPreviewEmpty');
+    const pvCode = document.getElementById('pvCode');
+    const pvTitle = document.getElementById('pvTitle');
+    const pvPrice = document.getElementById('pvPrice');
+
+    /* ---------------- State ---------------- */
+    const PAGE_SIZE = 25;
+    let lastEnqDoc = null;
+    let lastRegDoc = null;
+
+    let cacheEnq = [];
+    let cacheReg = [];
+    let cacheCats = []; // categories cache
+
+    let currentView = 'enq'; // enq | reg | cat
+
+    /* ---------------- Auth ---------------- */
+    onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        loginView.classList.add('hidden');
+        dashView.classList.remove('hidden');
+        btnSignOut.classList.remove('hidden');
+
+        await loadStats();
+        await loadEnquiries(true);
+        await loadRegistrations(true);
+        await loadCategories(true);
+
+        switchView('enq');
+      } else {
+        dashView.classList.add('hidden');
+        loginView.classList.remove('hidden');
+        btnSignOut.classList.add('hidden');
+      }
+    });
+
+    loginForm.addEventListener('submit', async (e)=>{
+      e.preventDefault();
+      loginError.style.display='none';
+      const email = (document.getElementById('loginEmail').value || '').trim();
+      const pass  = document.getElementById('loginPassword').value || '';
+      try{
+        await signInWithEmailAndPassword(auth, email, pass);
+      }catch(err){
+        loginError.textContent = `${err.code || ''} ${err.message || 'Login failed'}`;
+        loginError.style.display='block';
+      }
+    });
+
+    btnSignOut.addEventListener('click', ()=> signOut(auth));
+
+    /* ---------------- Sidebar navigation ---------------- */
+    navEnq.addEventListener('click', ()=> switchView('enq'));
+    navReg.addEventListener('click', ()=> switchView('reg'));
+    navCat.addEventListener('click', ()=> switchView('cat'));
+
+    function switchView(v){
+      currentView = v;
+
+      // active styles
+      [navEnq, navReg, navCat].forEach(x=>x.classList.remove('active'));
+      if(v==='enq') navEnq.classList.add('active');
+      if(v==='reg') navReg.classList.add('active');
+      if(v==='cat') navCat.classList.add('active');
+
+      // show/hide sections
+      viewEnq.classList.toggle('hidden', v!=='enq');
+      viewReg.classList.toggle('hidden', v!=='reg');
+      viewCat.classList.toggle('hidden', v!=='cat');
+
+      // show/hide categories actions
+      catActions.classList.toggle('d-none', v!=='cat');
+
+      // export CSV stays available (it exports current visible table). For categories we export Excel from button.
+      btnExport.disabled = (v === 'cat');
+
+      searchInput.value = '';
+      applySearch();
+    }
+
+    /* ---------------- Stats ---------------- */
+    async function loadStats(){
+      try{
+        const enqSnap = await getCountFromServer(collection(db, 'contact_enquiries'));
+        const regSnap = await getCountFromServer(collection(db, 'registrations'));
+        statEnquiries.textContent = enqSnap.data().count;
+        statRegistrations.textContent = regSnap.data().count;
+
+        // fees total (demo sums up to first 1000 docs)
+        let total = 0;
+        let cursor = null;
+        for(let i=0;i<40;i++){
+          const qref = cursor
+            ? query(collection(db,'registrations'), orderBy('createdAt','desc'), startAfter(cursor), limit(PAGE_SIZE))
+            : query(collection(db,'registrations'), orderBy('createdAt','desc'), limit(PAGE_SIZE));
+          const snap = await getDocs(qref);
+          if (snap.empty) break;
+          snap.forEach(d=>{
+            const data = d.data();
+            total += Number(data.totalUSD || 0);
+          });
+          cursor = snap.docs[snap.docs.length-1];
+          if (snap.size < PAGE_SIZE) break;
+        }
+        statFees.textContent = `$${total.toFixed(2)}`;
+      }catch(err){
+        console.error('Stats error:', err);
+      }
+    }
+
+    /* ---------------- Enquiries ---------------- */
+    async function loadEnquiries(reset=false){
+      try{
+        if (reset){ lastEnqDoc=null; cacheEnq=[]; tbodyEnquiries.innerHTML=''; }
+        const qref = lastEnqDoc
+          ? query(collection(db,'contact_enquiries'), orderBy('createdAt','desc'), startAfter(lastEnqDoc), limit(PAGE_SIZE))
+          : query(collection(db,'contact_enquiries'), orderBy('createdAt','desc'), limit(PAGE_SIZE));
+        const snap = await getDocs(qref);
+        if (snap.empty) return;
+        snap.forEach(d=>{
+          const x = d.data();
+          cacheEnq.push({ id:d.id, ...x });
+          tbodyEnquiries.insertAdjacentHTML('beforeend', renderEnquiryRow(d.id,x));
+        });
+        lastEnqDoc = snap.docs[snap.docs.length-1];
+      }catch(err){
+        console.error('Load enquiries error:', err);
+      }
+    }
+    function renderEnquiryRow(id,x){
+      const when = x.createdAt?.toDate ? x.createdAt.toDate() : (x.createdAt || new Date());
+      return `<tr data-id="${id}">
+        <td>${fmtDate(when)}</td>
+        <td>${escapeHTML(x.name||'')}</td>
+        <td>${escapeHTML(x.email||'')}</td>
+        <td>${escapeHTML(x.message||'')}</td>
+      </tr>`;
+    }
+
+    /* ---------------- Registrations ---------------- */
+    async function loadRegistrations(reset=false){
+      try{
+        if (reset){ lastRegDoc=null; cacheReg=[]; tbodyRegistrations.innerHTML=''; }
+        const qref = lastRegDoc
+          ? query(collection(db,'registrations'), orderBy('createdAt','desc'), startAfter(lastRegDoc), limit(PAGE_SIZE))
+          : query(collection(db,'registrations'), orderBy('createdAt','desc'), limit(PAGE_SIZE));
+        const snap = await getDocs(qref);
+        if (snap.empty) return;
+        snap.forEach(d=>{
+          const x = d.data();
+          cacheReg.push({ id:d.id, ...x });
+          tbodyRegistrations.insertAdjacentHTML('beforeend', renderRegistrationRow(d.id,x));
+        });
+        lastRegDoc = snap.docs[snap.docs.length-1];
+      }catch(err){
+        console.error('Load registrations error:', err);
+      }
+    }
+    function renderRegistrationRow(id,x){
+      const when = x.createdAt?.toDate ? x.createdAt.toDate() : (x.createdAt || new Date());
+      const institute = (x.instituteDropdown || '') + (x.instituteName ? ` — ${x.instituteName}` : '');
+      const members = Array.isArray(x.members) ? x.members.join(', ') : '';
+      const cats = Array.isArray(x.cart) ? x.cart.map(i=>`${i.category} (x${i.quantity||1})`).join(', ') : '';
+      return `<tr data-id="${id}">
+        <td>${fmtDate(when)}</td>
+        <td>${escapeHTML(x.teamName||'')}</td>
+        <td>${escapeHTML(institute)}</td>
+        <td>${escapeHTML(x.contact||'')}</td>
+        <td>${escapeHTML(x.email||'')}</td>
+        <td>${escapeHTML(members)}</td>
+        <td>${escapeHTML(cats)}</td>
+        <td>$${Number(x.totalUSD || 0).toFixed(2)}</td>
+      </tr>`;
+    }
+
+    /* ---------------- Categories ---------------- */
+    async function loadCategories(reset=false){
+      try{
+        if(reset){ cacheCats=[]; catGrid.innerHTML=''; }
+        // Load categories (no pagination needed usually; if you have many, add pagination)
+        const qref = query(collection(db,'categories'), orderBy('createdAt','desc'), limit(500));
+        const snap = await getDocs(qref);
+
+        cacheCats = snap.docs.map(d => ({ id:d.id, ...d.data() }));
+        renderCategoriesGrid(cacheCats);
+      }catch(err){
+        console.error('Load categories error:', err);
+      }
+    }
+
+    function renderCategoriesGrid(list){
+      catCount.textContent = String(list.length || 0);
+
+      if(!list.length){
+        catGrid.innerHTML = '';
+        catEmpty.classList.remove('hidden');
+        return;
+      }
+      catEmpty.classList.add('hidden');
+
+      catGrid.innerHTML = list.map(c=>{
+        const img = c.imageUrl || '';
+        const price = Number(c.priceRs || 0);
+        return `
+          <div class="glass-card cat-card">
+            <div class="cat-img">
+              ${img ? `<img src="${escapeHTML(img)}" alt="${escapeHTML(c.title||'')}" />`
+                    : `<div class="h-100 d-flex align-items-center justify-content-center help-muted">No Image</div>`}
+            </div>
+            <div class="cat-body">
+              <div class="d-flex justify-content-between align-items-start gap-2">
+                <div>
+                  <p class="cat-title mb-1">${escapeHTML(c.title || '')}</p>
+                  <div class="cat-meta">Code: <b>${escapeHTML(c.code || c.id || '')}</b></div>
+                </div>
+                <div class="cat-price">₨ ${price.toLocaleString('en-PK')}</div>
+              </div>
+              <div class="cat-desc">${escapeHTML(c.description || '')}</div>
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      applySearch();
+    }
+
+    /* ---------------- Category Modal / Save ---------------- */
+    btnAddCategory.addEventListener('click', ()=>{
+      clearCategoryForm();
+      catModal.show();
+    });
+
+    catImage.addEventListener('change', ()=>{
+      const f = catImage.files?.[0];
+      if(!f){
+        catPreviewImg.style.display = 'none';
+        catPreviewEmpty.style.display = '';
+        return;
+      }
+      const url = URL.createObjectURL(f);
+      catPreviewImg.src = url;
+      catPreviewImg.style.display = '';
+      catPreviewEmpty.style.display = 'none';
+    });
+
+    [catCode, catTitle, catPrice].forEach(el=>{
+      el.addEventListener('input', ()=>{
+        pvCode.textContent = (catCode.value || '—');
+        pvTitle.textContent = (catTitle.value || '—');
+        const p = Number(catPrice.value || 0);
+        pvPrice.textContent = `₨ ${p.toLocaleString('en-PK')}`;
+      });
+    });
+
+    btnSaveCategory.addEventListener('click', async ()=>{
+      catFormError.classList.add('hidden');
+      const code = (catCode.value || '').trim();
+      const title = (catTitle.value || '').trim();
+      const description = (catDesc.value || '').trim();
+      const priceRs = Number(catPrice.value || 0);
+
+      if(!code || !title || !(priceRs >= 0)){
+        showCatError('Please fill Code, Title, and Price (Rs).');
+        return;
+      }
+
+      try{
+        btnSaveCategory.disabled = true;
+        btnSaveCategory.innerHTML = '<i class="fa fa-spinner fa-spin"></i> Saving...';
+
+        // Upload image (optional)
+        let imageUrl = '';
+        const file = catImage.files?.[0] || null;
+
+        if(file){
+          const safeName = file.name.replace(/[^a-z0-9.\-_]/gi,'_');
+          const path = `categories/${code}/${Date.now()}_${safeName}`;
+          const storageRef = sRef(storage, path);
+          await uploadBytes(storageRef, file);
+          imageUrl = await getDownloadURL(storageRef);
+        }
+
+        // Save to Firestore (doc id = code)
+        const payload = {
+          code,
+          title,
+          description,
+          priceRs,
+          ...(imageUrl ? { imageUrl } : {}),
+          updatedAt: serverTimestamp(),
+          createdAt: serverTimestamp()
+        };
+
+        await setDoc(doc(db,'categories', code), payload, { merge: true });
+
+        await loadCategories(true);
+        catModal.hide();
+      }catch(err){
+        console.error(err);
+        showCatError('Could not save category. Check Firebase rules & Storage permissions.');
+      }finally{
+        btnSaveCategory.disabled = false;
+        btnSaveCategory.innerHTML = '<i class="fa fa-save"></i> Save';
+      }
+    });
+
+    function clearCategoryForm(){
+      catFormError.classList.add('hidden');
+      catImage.value = '';
+      catCode.value = '';
+      catTitle.value = '';
+      catDesc.value = '';
+      catPrice.value = '';
+
+      pvCode.textContent = '—';
+      pvTitle.textContent = '—';
+      pvPrice.textContent = '—';
+
+      catPreviewImg.src = '';
+      catPreviewImg.style.display = 'none';
+      catPreviewEmpty.style.display = '';
+    }
+
+    function showCatError(msg){
+      catFormError.textContent = msg;
+      catFormError.classList.remove('hidden');
+    }
+
+    /* ---------------- Excel Upload/Download ---------------- */
+    btnUploadExcel.addEventListener('click', ()=> excelInput.click());
+
+    excelInput.addEventListener('change', async ()=>{
+      const file = excelInput.files?.[0];
+      excelInput.value = '';
+      if(!file) return;
+
+      try{
+        const buf = await file.arrayBuffer();
+        const wb = XLSX.read(buf, { type:'array' });
+        const sheetName = wb.SheetNames[0];
+        const ws = wb.Sheets[sheetName];
+        const rows = XLSX.utils.sheet_to_json(ws, { defval:'' });
+
+        // Expect columns: code, title, description, priceRs, imageUrl(optional)
+        const cleaned = rows
+          .map(r => ({
+            code: String(r.code || r.Code || r.CODE || '').trim(),
+            title: String(r.title || r.Title || r.TITLE || '').trim(),
+            description: String(r.description || r.Description || r.DESC || '').trim(),
+            priceRs: Number(r.priceRs || r.PriceRs || r.price || r.Price || 0),
+            imageUrl: String(r.imageUrl || r.ImageUrl || r.image || r.Image || '').trim()
+          }))
+          .filter(x => x.code && x.title);
+
+        if(!cleaned.length){
+          alert('No valid rows found. Excel must have columns: code, title, description, priceRs, imageUrl(optional).');
+          return;
+        }
+
+        // Batch write
+        const batch = writeBatch(db);
+        cleaned.forEach(x=>{
+          const ref = doc(db,'categories', x.code);
+          const payload = {
+            code: x.code,
+            title: x.title,
+            description: x.description,
+            priceRs: Number(x.priceRs || 0),
+            ...(x.imageUrl ? { imageUrl: x.imageUrl } : {}),
+            updatedAt: serverTimestamp(),
+            createdAt: serverTimestamp()
+          };
+          batch.set(ref, payload, { merge:true });
+        });
+
+        await batch.commit();
+        await loadCategories(true);
+
+        alert(`Uploaded ${cleaned.length} categories successfully.`);
+      }catch(err){
+        console.error(err);
+        alert('Excel upload failed. Check console for details.');
+      }
+    });
+
+    btnDownloadExcel.addEventListener('click', ()=>{
+      try{
+        const data = (cacheCats || []).map(c => ({
+          code: c.code || c.id || '',
+          title: c.title || '',
+          description: c.description || '',
+          priceRs: Number(c.priceRs || 0),
+          imageUrl: c.imageUrl || ''
+        }));
+
+        const ws = XLSX.utils.json_to_sheet(data);
+        const wb = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, ws, 'categories');
+        XLSX.writeFile(wb, 'categories.xlsx');
+      }catch(err){
+        console.error(err);
+        alert('Download failed.');
+      }
+    });
+
+    /* ---------------- Search & Export ---------------- */
+    searchInput.addEventListener('input', applySearch);
+
+    function applySearch(){
+      const q = searchInput.value.toLowerCase().trim();
+
+      if(currentView === 'enq'){
+        for (const tr of tbodyEnquiries.rows){
+          const hay = tr.innerText.toLowerCase();
+          tr.style.display = hay.includes(q) ? '' : 'none';
+        }
+        return;
+      }
+
+      if(currentView === 'reg'){
+        for (const tr of tbodyRegistrations.rows){
+          const hay = tr.innerText.toLowerCase();
+          tr.style.display = hay.includes(q) ? '' : 'none';
+        }
+        return;
+      }
+
+      if(currentView === 'cat'){
+        // filter by title/code/desc/price
+        const filtered = (cacheCats || []).filter(c=>{
+          const hay = `${c.code||c.id||''} ${c.title||''} ${c.description||''} ${c.priceRs||''}`.toLowerCase();
+          return hay.includes(q);
+        });
+        renderCategoriesGrid(filtered);
+      }
+    }
+
+    // Export CSV (current visible table only)
+    btnExport.addEventListener('click', ()=>{
+      const isReg = (currentView === 'reg');
+      const isEnq = (currentView === 'enq');
+      if(!isReg && !isEnq) return;
+
+      const rows = isReg ? tbodyRegistrations.rows : tbodyEnquiries.rows;
+      let csv = '';
+      const headers = isReg
+        ? ['When','Team','Institute','Contact','Email','Members','Categories','TotalUSD']
+        : ['When','Name','Email','Message'];
+      csv += headers.join(',') + '\n';
+      for (const tr of rows){
+        if (tr.style.display === 'none') continue;
+        const cells = [...tr.cells].map(td => `"${td.innerText.replace(/"/g,'""')}"`);
+        csv += cells.join(',') + '\n';
+      }
+      const blob = new Blob([csv], {type:'text/csv;charset=utf-8;'});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = isReg ? 'registrations.csv' : 'enquiries.csv';
+      a.click();
+      URL.revokeObjectURL(url);
+    });
+
+    /* ---------------- Pagination ---------------- */
+    moreEnq.addEventListener('click', ()=> loadEnquiries(false));
+    moreReg.addEventListener('click', ()=> loadRegistrations(false));
+
+    /* ---------------- Utils ---------------- */
+    function fmtDate(d){
+      try{
+        const dt = (d instanceof Date) ? d : new Date(d);
+        return dt.toLocaleString();
+      }catch{ return '' }
+    }
+    function escapeHTML(s){
+      return String(s||'').replace(/[&<>"']/g, m=>({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[m]));
+    }
+  </script>
+</body>
+</html>

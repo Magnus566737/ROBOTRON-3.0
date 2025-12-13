@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>ROBOTRON 3.0 — Bulk Institute Registration</title>
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;800&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet"/>
+
+  <style>
+    :root{--bg-0:#070b16;--bg-1:#0b1426;--bg-2:#0f1b33;--txt:#e6f1ff;--muted:#9fb3c8;--primary:#6c5ce7;--primary-2:#00e5ff;--accent:#00ff9d;--glass:rgba(255,255,255,.06);--glass-strong:rgba(255,255,255,.09);--border-grad:linear-gradient(90deg,var(--primary-2),var(--primary),var(--accent));--card-shadow:0 8px 30px rgba(0,0,0,.35)}
+    *{box-sizing:border-box}
+    body{font-family:'Roboto',sans-serif;color:var(--txt);background:var(--bg-0);min-height:100vh;overflow-x:hidden}
+    body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:-2;background:radial-gradient(900px 500px at 80% -100px,rgba(108,92,231,.28),transparent 60%),radial-gradient(800px 480px at -10% 120%,rgba(0,229,255,.22),transparent 60%)}
+    body::after{content:"";position:fixed;inset:0;z-index:-1;opacity:.05;pointer-events:none;background-image:linear-gradient(to right,rgba(255,255,255,.06) 1px,transparent 1px),linear-gradient(to bottom,rgba(255,255,255,.06) 1px,transparent 1px);background-size:40px 40px;animation:move 40s linear infinite}
+    @keyframes move{from{transform:translateY(0)}to{transform:translateY(40px)}}
+    h1,h2,h3,h4{font-family:'Orbitron',sans-serif}
+    .navbar{background:rgba(7,11,22,.75);backdrop-filter:blur(10px);border-bottom:1px solid rgba(255,255,255,.08)}
+    .navbar-brand{font-weight:800;letter-spacing:1.2px;color:#fff!important;display:flex;align-items:center;gap:.6rem}
+    .brand-accent{width:26px;height:26px;border-radius:6px;background:var(--border-grad);box-shadow:0 0 18px rgba(0,229,255,.35)}
+    .section{padding:70px 0;background:var(--bg-1);border-top:1px solid rgba(255,255,255,.07);border-bottom:1px solid rgba(255,255,255,.07)}
+    .section-title{text-align:center;margin-bottom:28px}
+    .title-underline{width:88px;height:3px;margin:10px auto 0;background:var(--border-grad);border-radius:999px;box-shadow:0 0 20px rgba(0,229,255,.35)}
+    .glass-card{background:var(--glass);border:1px solid rgba(255,255,255,.12);border-radius:16px;box-shadow:var(--card-shadow)}
+    .btn-primary{background:var(--border-grad);border:0;border-radius:12px;padding:10px 20px;font-weight:700;box-shadow:0 10px 30px rgba(0,229,255,.18)}
+    .btn-outline-light{color:#e6f1ff;border-color:rgba(255,255,255,.25);border-radius:12px}
+    .btn-outline-light:hover{background:var(--glass)}
+    .form-label{color:#d9e9ff;text-transform:uppercase;font-size:.85rem;letter-spacing:.8px}
+    .form-control,.form-select{background:#0e1a31;color:#fff;border:1px solid rgba(255,255,255,.14);border-radius:10px;padding:10px 12px}
+    .form-control:focus,.form-select:focus{box-shadow:0 0 0 .25rem rgba(0,229,255,.15);border-color:#00e5ff;background:#0f1f3a;color:#fff}
+    footer{background:#060a13;color:#9fb3c8;padding:26px 0;text-align:center}
+    .muted{color:var(--muted)}
+    .team-card{position:relative}
+    .team-remove{position:absolute;top:10px;right:10px}
+    .summary-table th,.summary-table td{vertical-align:middle}
+    .pill{display:inline-block;padding:6px 10px;border-radius:999px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.14);margin:2px 6px 2px 0}
+    .cat-option{cursor:pointer;transition:transform .2s, box-shadow .2s;}
+    .cat-option:hover{transform:translateY(-3px);box-shadow:0 10px 25px rgba(0,229,255,.15);}
+    .cat-option .form-check-label{font-size:.95rem;}
+    .cat-option input[type="checkbox"]{accent-color:var(--primary-2);}
+  </style>
+</head>
+<body>
+  <nav class="navbar navbar-expand-lg navbar-dark">
+    <div class="container">
+      <a class="navbar-brand" href="index.html"><span class="brand-accent"></span> ROBOTRON</a>
+      <div class="d-flex"><a href="index.html" class="btn btn-outline-light btn-sm">Back to Home</a></div>
+    </div>
+  </nav>
+
+  <section class="section">
+    <div class="container">
+      <div class="section-title">
+        <h2>Bulk Registration — Institute</h2>
+        <div class="title-underline"></div>
+        <p class="muted mt-2">Add multiple teams under one institute. Choose categories per team. All fees are in PKR.</p>
+      </div>
+
+      <!-- Institute info -->
+      <div class="glass-card p-3 p-md-4 mb-4">
+        <h4 class="mb-3">Institute Details</h4>
+        <form id="instForm" class="row g-3" novalidate>
+          <div class="col-md-4">
+            <label class="form-label">Select your institute</label>
+            <select id="instituteSelect" class="form-select" required>
+              <option value="">Choose an option</option>
+              <option>School</option><option>College</option><option>University</option>
+            </select>
+            <div class="invalid-feedback">Please select your institute.</div>
+          </div>
+          <div class="col-md-4">
+            <label class="form-label">Institute Name (optional)</label>
+            <input id="instituteName" class="form-control" placeholder="If not in the list"/>
+          </div>
+          <div class="col-md-4">
+            <label class="form-label">Coordinator Contact</label>
+            <input id="contact" class="form-control" type="tel" placeholder="+92XXXXXXXXXX" pattern="^[+]?[\d\s\-()]{7,}$" required>
+            <div class="invalid-feedback">Enter a valid contact number.</div>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">Coordinator Email</label>
+            <input id="email" class="form-control" type="email" required>
+            <div class="invalid-feedback">Enter a valid email.</div>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">Notes (optional)</label>
+            <input id="notes" class="form-control" placeholder="Any additional info"/>
+          </div>
+        </form>
+      </div>
+
+      <!-- Teams builder -->
+      <div class="glass-card p-3 p-md-4 mb-4">
+        <div class="d-flex justify-content-between align-items-center mb-2">
+          <h4 class="mb-0">Teams</h4>
+          <button id="addTeamBtn" class="btn btn-primary btn-sm"><i class="fa fa-plus"></i> Add Team</button>
+        </div>
+        <div id="teamsWrap" class="row g-3"></div>
+      </div>
+
+      <!-- Summary -->
+      <div class="glass-card p-3 p-md-4 mb-4">
+        <h4 class="mb-3">Institute Summary</h4>
+        <div id="summaryEmpty" class="muted">Add at least one team to see the summary here.</div>
+        <div id="summaryTableWrap" class="table-responsive d-none">
+          <table class="table table-sm table-hover align-middle summary-table">
+            <thead>
+              <tr>
+                <th>#</th><th>Team Name</th><th>Members</th><th>Categories</th><th class="text-end">Total (PKR)</th>
+              </tr>
+            </thead>
+            <tbody id="summaryBody"></tbody>
+            <tfoot>
+              <tr>
+                <th colspan="4" class="text-end">Grand Total</th>
+                <th class="text-end" id="grandTotal">₨ 0 PKR</th>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+      </div>
+
+      <!-- Payment info (no third-party JS here) -->
+      <div class="glass-card p-3 p-md-4 mb-4">
+        <h4 class="mb-2">Payment Information</h4>
+        <p class="muted mb-2">After submitting, our team will contact you with bank gateway/transfer instructions.</p>
+        <ul class="mb-0">
+          <li>Currency: <strong>PKR</strong></li>
+          <li>Status on submit: <strong>pending</strong></li>
+        </ul>
+      </div>
+
+      <!-- Submit -->
+      <div class="d-grid d-md-flex gap-2">
+        <button id="submitAll" class="btn btn-primary btn-lg"><i class="fa fa-paper-plane"></i> Submit Institute Registration</button>
+        <button id="resetAll" class="btn btn-outline-light"><i class="fa fa-undo"></i> Reset</button>
+      </div>
+      <p class="muted mt-3" style="font-size:.9rem">By submitting, you confirm the above teams and fees. A confirmation email will be sent.</p>
+    </div>
+  </section>
+
+  <footer><div class="container"><p>&copy; 2025 Robotron. Made By SRET</p></div></footer>
+
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+  <!-- Main logic (modules) -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
+    import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
+    /* shared categories loader + helpers */
+    import { loadCategories, categoryMap, currency } from "./js/catData.js";  /* <-- FIXED PATH */
+
+    /* ------------ Firebase ------------ */
+    const firebaseConfig = {
+      apiKey: "AIzaSyChGwuGwBV4_n_eK8JUCBOLeshcqKEsgAo",
+      authDomain: "robtron3-d77fe.firebaseapp.com",
+      projectId: "robtron3-d77fe",
+      storageBucket: "robtron3-d77fe.firebasestorage.app",
+      messagingSenderId: "1058046235994",
+      appId: "1:1058046235994:web:0ebc43e531ac14195a0f63",
+      measurementId: "G-96ETYYF7HR"
+    };
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    /* ------------ Categories (shared array) ------------ */
+    const CATEGORIES = await loadCategories();   // [{id,name,fee}, ...]
+    const CATMAP = categoryMap();                // { id -> category }
+
+    /* ------------ Teams UI ------------ */
+    const teamsWrap = document.getElementById('teamsWrap');
+    let teamCounter = 0;
+
+    function teamCard(id){
+      return `
+        <div class="col-12" data-team-id="${id}">
+          <div class="glass-card p-3 p-md-4 team-card">
+            <button type="button" class="btn btn-outline-light btn-sm team-remove" data-remove="${id}">
+              <i class="fa fa-trash"></i>
+            </button>
+            <div class="row g-3">
+              <div class="col-md-4">
+                <label class="form-label">Team Name</label>
+                <input class="form-control team-name" required placeholder="e.g., Alpha Bots">
+              </div>
+              <div class="col-md-8">
+                <label class="form-label">Members (comma separated)</label>
+                <input class="form-control team-members" required placeholder="Ali, Ahmed, Sara">
+              </div>
+              <div class="col-12">
+                <label class="form-label">Categories (select one or more)</label>
+                <div class="category-options row g-3 mt-1">
+                  ${CATEGORIES.map(c=>`
+                    <div class="col-md-4">
+                      <div class="cat-option glass-card p-3 h-100">
+                        <div class="form-check">
+                          <input class="form-check-input team-cat" type="checkbox" value="${c.id}" id="cat-${id}-${c.id}">
+                          <label class="form-check-label fw-bold" for="cat-${id}-${c.id}">${c.name}</label>
+                        </div>
+                        <div class="text-muted small mt-1">Fee: ${currency(c.fee)}</div>
+                      </div>
+                    </div>`).join('')}
+                </div>
+              </div>
+            </div>
+            <div class="d-flex justify-content-between align-items-center mt-3">
+              <div class="muted small">Team total updates automatically in the summary below.</div>
+              <div class="fw-bold">Team #${id}</div>
+            </div>
+          </div>
+        </div>`;
+    }
+
+    function addTeam(){
+      teamCounter += 1;
+      teamsWrap.insertAdjacentHTML('beforeend', teamCard(teamCounter));
+      attachHandlers();
+      buildSummary();
+    }
+    function removeTeam(id){
+      const el = teamsWrap.querySelector(`[data-team-id="${id}"]`);
+      if (el) el.remove();
+      buildSummary();
+    }
+
+    function readTeams(){
+      const blocks = [...teamsWrap.querySelectorAll('[data-team-id]')];
+      return blocks.map((block, idx) => {
+        const name = block.querySelector('.team-name')?.value?.trim();
+        const membersStr = block.querySelector('.team-members')?.value || '';
+        const members = membersStr.split(',').map(s=>s.trim()).filter(Boolean);
+
+        /* read checked checkboxes -> map to category objects */
+        const catCheckboxes = block.querySelectorAll('.team-cat:checked');
+        const selectedIds = [...catCheckboxes].map(c=>c.value);
+        const categories = selectedIds.map(id => CATMAP[id]).filter(Boolean);
+
+        const total = categories.reduce((s,c)=> s + (Number(c.fee)||0), 0);
+        return { idx: idx+1, name, members, categories, total };
+      }).filter(t => (t.name||'').length>0 || t.members.length>0 || t.categories.length>0);
+    }
+
+    function buildSummary(){
+      const teams = readTeams();
+      const summaryBody = document.getElementById('summaryBody');
+      const empty = document.getElementById('summaryEmpty');
+      const tableWrap = document.getElementById('summaryTableWrap');
+
+      if(!teams.length){
+        tableWrap.classList.add('d-none');
+        empty.classList.remove('d-none');
+        summaryBody.innerHTML = '';
+        document.getElementById('grandTotal').textContent = currency(0);
+        return;
+      }
+      empty.classList.add('d-none');
+      tableWrap.classList.remove('d-none');
+
+      let grand = 0;
+      summaryBody.innerHTML = teams.map(t=>{
+        grand += t.total;
+        const cats = t.categories.map(c=>`<span class="pill">${c.name}</span>`).join('');
+        const mems = t.members.map(m=>`<span class="pill">${m}</span>`).join('');
+        return `<tr>
+          <td>${t.idx}</td>
+          <td>${t.name || '-'}</td>
+          <td>${mems || '-'}</td>
+          <td>${cats || '-'}</td>
+          <td class="text-end">${currency(t.total)}</td>
+        </tr>`;
+      }).join('');
+      document.getElementById('grandTotal').textContent = currency(grand);
+    }
+
+    function attachHandlers(){
+      teamsWrap.querySelectorAll('[data-remove]').forEach(btn=>{
+        btn.onclick = ()=> removeTeam(btn.getAttribute('data-remove'));
+      });
+      teamsWrap.querySelectorAll('input,select').forEach(el=>{
+        el.oninput = buildSummary;
+        el.onchange = buildSummary;
+      });
+    }
+
+    // initial team
+    document.getElementById('addTeamBtn').addEventListener('click', addTeam);
+    addTeam();
+
+    /* ------------ Submit ------------ */
+    function validateInstitute(){
+      const form = document.getElementById('instForm');
+      const ok = form.checkValidity();
+      if(!ok) form.classList.add('was-validated');
+      return ok;
+    }
+
+    document.getElementById('resetAll').addEventListener('click', ()=>{
+      document.getElementById('instForm').reset();
+      teamsWrap.innerHTML = '';
+      teamCounter = 0;
+      addTeam();
+      buildSummary();
+      window.scrollTo({top:0, behavior:'smooth'});
+    });
+
+    document.getElementById('submitAll').addEventListener('click', async ()=>{
+      if(!validateInstitute()){ window.scrollTo({top:0,behavior:'smooth'}); return; }
+
+      const teams = readTeams();
+      if(!teams.length){ alert('Please add at least one team and choose categories.'); return; }
+      for(const t of teams){
+        if(!(t.name && t.members.length && t.categories.length)){
+          alert('Each team must have a name, at least one member, and at least one category.');
+          return;
+        }
+      }
+
+      const grandTotal = teams.reduce((s,t)=>s+t.total,0);
+      const payload = {
+        type: 'bulk_institute',
+        instituteDropdown: document.getElementById('instituteSelect').value,
+        instituteName: (document.getElementById('instituteName').value||'').trim(),
+        contact: (document.getElementById('contact').value||'').trim(),
+        email: (document.getElementById('email').value||'').trim(),
+        notes: (document.getElementById('notes').value||'').trim(),
+        currency: 'PKR',
+        totals: { currency:'PKR', amount: grandTotal },
+        teams: teams.map(t=>({
+          teamName: t.name,
+          members: t.members,
+          categories: t.categories.map(c=>({ id:c.id, name:c.name, fee:c.fee })),
+          total: t.total
+        })),
+        payment: {
+          provider: 'bank',
+          method: 'hosted_checkout',
+          status: 'pending'
+        },
+        source: 'bulk_registration_form',
+        createdAt: serverTimestamp()
+      };
+
+      try{
+        const ref = await addDoc(collection(db,'registrations'), payload);
+        alert('Institute registration submitted! Reference: ' + ref.id);
+        window.location.href = 'index.html';
+      }catch(err){
+        console.error(err);
+        alert('Could not submit right now. Please try again.');
+      }
+    });
+  </script>
+</body>
+</html>
