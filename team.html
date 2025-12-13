@@ -1,555 +1,520 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>ROBOTRON 3.0 — Team</title>
 
   <!-- Bootstrap -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"/>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"/>
+
+  <!-- Font Awesome 4.7 -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"/>
 
   <!-- Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;800&family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;800&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet"/>
 
   <style>
     :root{
-      --bg:#070B18;
-      --card:#0E1535;
-      --card2:#0B112C;
-      --glow:#00F0FF;
-      --glow2:#8A5CFF;
-      --txt:#dfeaff;
-      --muted:#9bb0d3;
-      --line:rgba(255,255,255,.12);
+      --bg-0:#070b16; --bg-1:#0b1426; --bg-2:#0f1b33;
+      --txt:#e6f1ff; --muted:#9fb3c8;
+      --primary:#6c5ce7; --primary-2:#00e5ff; --accent:#00ff9d;
+      --glass:rgba(255,255,255,.06); --glass-strong:rgba(255,255,255,.09);
+      --border-grad: linear-gradient(90deg,var(--primary-2),var(--primary),var(--accent));
+      --card-shadow: 0 14px 40px rgba(0,0,0,.38);
     }
+    *{box-sizing:border-box}
+    body{font-family:'Roboto',sans-serif;color:var(--txt);background:var(--bg-0);min-height:100vh;overflow-x:hidden;}
 
-    *{ box-sizing:border-box; }
-    body{
-      margin:0;
+    /* energy + grid background */
+    body::before{
+      content:""; position:fixed; inset:0; pointer-events:none; z-index:-2;
       background:
-        radial-gradient(900px 500px at 20% -10%, rgba(0,240,255,.22), transparent 70%),
-        radial-gradient(900px 500px at 100% 0%, rgba(138,92,255,.22), transparent 70%),
-        radial-gradient(900px 500px at 20% 110%, rgba(138,92,255,.16), transparent 70%),
-        linear-gradient(180deg, #050712, #060A16 45%, #040610);
-      color:var(--txt);
-      font-family:Inter, system-ui, -apple-system, Segoe UI, Arial, sans-serif;
-      min-height:100vh;
-      overflow-x:hidden;
+        radial-gradient(1000px 560px at 80% -100px, rgba(108,92,231,.30), transparent 60%),
+        radial-gradient(900px 520px at -10% 120%, rgba(0,229,255,.22), transparent 60%);
     }
+    body::after{
+      content:""; position:fixed; inset:0; z-index:-1; opacity:.05; pointer-events:none;
+      background-image: linear-gradient(to right, rgba(255,255,255,.06) 1px, transparent 1px),
+                        linear-gradient(to bottom, rgba(255,255,255,.06) 1px, transparent 1px);
+      background-size:40px 40px; animation:move 40s linear infinite;
+    }
+    @keyframes move{ from{transform:translateY(0)} to{transform:translateY(40px)} }
 
-    /* Navbar */
-    .navbar{
-      background: rgba(5,8,20,.55);
-      backdrop-filter: blur(12px);
-      border-bottom: 1px solid var(--line);
-    }
-    .navbar-brand{
-      font-family:Orbitron, sans-serif;
-      letter-spacing: 1px;
-      font-weight: 800;
-      color: #fff !important;
-      text-transform: uppercase;
-    }
-    .nav-link{
-      color: rgba(223,234,255,.86) !important;
-      font-weight: 600;
-      opacity: .95;
-    }
-    .nav-link:hover{ color:#fff !important; }
-    .nav-link.active{
-      color:#fff !important;
-      text-shadow: 0 0 10px rgba(0,240,255,.35);
-    }
+    h1,h2,h3,h4{font-family:'Orbitron',sans-serif}
 
-    /* Page Title */
-    .title-wrap{
-      padding: 64px 0 22px;
+    /* Navbar (same theme) */
+    .navbar{ background: rgba(7,11,22,.75); backdrop-filter: blur(10px); border-bottom:1px solid rgba(255,255,255,.08); }
+    .navbar-brand{ font-weight:800; letter-spacing:1.2px; color:#fff !important; display:flex; align-items:center; gap:.6rem; }
+    .brand-accent{ width:26px;height:26px;border-radius:6px;background:var(--border-grad); box-shadow:0 0 18px rgba(0,229,255,.35); }
+    .nav-link{ position:relative }
+    .nav-link i{ margin-right:.35rem }
+    .nav-link::after{ content:""; position:absolute; left:0; bottom:-6px; width:0; height:2px; background:var(--border-grad); transition:width .25s ease; }
+    .nav-link:hover::after{ width:100% }
+
+    /* Page header */
+    .page-hero{
+      padding:90px 0 40px;
       text-align:center;
+      background: radial-gradient(1200px 380px at 50% -120px, rgba(108,92,231,.35), transparent 60%);
+      border-bottom:1px solid rgba(255,255,255,.07);
     }
-    .title-wrap h1{
-      font-family:Orbitron, sans-serif;
-      font-weight: 800;
-      letter-spacing: 1px;
-      margin:0 0 10px;
+    .title-underline{ width:88px;height:3px;margin:12px auto 0;background:var(--border-grad);border-radius:999px; box-shadow:0 0 20px rgba(0,229,255,.35); }
+
+    /* Section */
+    .section{ padding:50px 0 80px; background:var(--bg-1); border-bottom:1px solid rgba(255,255,255,.07); }
+
+    /* Team card (new professional style) */
+    .team-card{
+      background:var(--glass);
+      border:1px solid rgba(255,255,255,.12);
+      border-radius:22px;
+      overflow:hidden;
+      box-shadow:var(--card-shadow);
+      transition:transform .25s ease, box-shadow .25s ease, background .2s ease;
+      position:relative;
     }
-    .title-wrap p{
-      margin:0 auto;
-      max-width: 860px;
-      color: var(--muted);
-      font-size: 15.5px;
-      line-height: 1.6;
+    .team-card:hover{ transform:translateY(-6px); background:var(--glass-strong); box-shadow:0 20px 60px rgba(0,0,0,.55); }
+    .team-photo{
+      padding:18px 18px 0;
+    }
+    .team-photo .frame{
+      position:relative;
+      border-radius:18px;
+      padding:4px;
+      background:var(--border-grad);
+    }
+    .team-photo img{
+      display:block;
+      width:100%;
+      height:320px;
+      object-fit:cover;
+      border-radius:14px;
+      background:#1a2238;
+      filter: saturate(1.02) contrast(1.02);
+    }
+    .role-pill{
+      position:absolute; bottom:10px; left:14px;
+      background:rgba(7,11,22,.82);
+      border:1px solid rgba(255,255,255,.14);
+      color:#cfe7ff; font-weight:700; letter-spacing:.6px;
+      border-radius:999px; padding:6px 10px; font-size:.72rem;
+    }
+    .team-body{ padding:16px 18px 18px; }
+    .team-name{ margin:0 0 4px; font-weight:800 }
+    .team-meta{ margin:0; color:var(--muted); font-size:.95rem }
+
+    .socials{ display:flex; gap:10px; margin-top:10px }
+    .socials a{
+      width:36px; height:36px; display:flex; align-items:center; justify-content:center;
+      border-radius:10px; background:rgba(255,255,255,.06);
+      border:1px solid rgba(255,255,255,.12); color:#dfeaff;
+      transition: transform .2s ease, background .2s ease;
+    }
+    .socials a:hover{ transform:translateY(-2px); background:rgba(255,255,255,.12) }
+
+    /* SRET Hierarchy Layout */
+    #sret-hierarchy {
+      padding: 40px 0 60px;
     }
 
-    /* Layout cards */
-    .glass-card{
-      background: linear-gradient(180deg, rgba(14,21,53,.72), rgba(11,17,44,.72));
-      border: 1px solid rgba(255,255,255,.10);
-      box-shadow: 0 18px 55px rgba(0,0,0,.35);
-      border-radius: 18px;
-      padding: 22px;
-      backdrop-filter: blur(12px);
-      margin-bottom: 22px;
+    .sret-chart {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0;
+      padding: 20px 0;
+      position: relative;
     }
 
-    /* Sections */
-    .section-title{
-      font-family:Orbitron, sans-serif;
-      letter-spacing: .7px;
-      font-weight: 800;
-      margin: 0 0 14px;
-      display:flex;
-      align-items:center;
+    .sret-level-main {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 9px;
+      position: relative;
+    }
+
+    .gs-row {
       gap: 10px;
     }
-    .section-title .dot{
-      width:10px; height:10px;
-      border-radius:50%;
-      background: var(--glow);
-      box-shadow: 0 0 20px rgba(0,240,255,.45);
-      display:inline-block;
+
+    .sret-node {
+      background: var(--glass);
+      border: 1px solid #00f0ff;
+      color: var(--txt);
+      padding: 6px 11px;
+      border-radius: 12px;
+      font-size: 12.5px;
+      text-align: center;
+      box-shadow: 0 0 8px rgba(0,240,255,0.25);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-width: 160px;
     }
 
-    /* Team grid */
-    .team-grid{
-      display:grid;
-      grid-template-columns: repeat(4, minmax(0,1fr));
-      gap: 16px;
-    }
-    @media (max-width: 1200px){
-      .team-grid{ grid-template-columns: repeat(3, minmax(0,1fr)); }
-    }
-    @media (max-width: 900px){
-      .team-grid{ grid-template-columns: repeat(2, minmax(0,1fr)); }
-    }
-    @media (max-width: 520px){
-      .team-grid{ grid-template-columns: 1fr; }
+    .sret-node.big {
+      font-size: 15.5px;
+      font-weight: 700;
+      padding: 8px 14px;
     }
 
-    .member-card{
-      background: linear-gradient(180deg, rgba(8,12,30,.65), rgba(8,12,30,.35));
-      border: 1px solid rgba(255,255,255,.10);
-      border-radius: 16px;
-      padding: 16px 14px;
-      position: relative;
-      overflow:hidden;
-      transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
-      min-height: 135px;
-    }
-    .member-card:hover{
-      transform: translateY(-3px);
-      box-shadow: 0 18px 40px rgba(0,0,0,.35);
-      border-color: rgba(0,240,255,.25);
-    }
-    .member-card:before{
-      content:"";
-      position:absolute;
-      inset:-1px;
-      background:
-        radial-gradient(240px 140px at 10% 0%, rgba(0,240,255,.12), transparent 60%),
-        radial-gradient(240px 140px at 100% 10%, rgba(138,92,255,.10), transparent 60%);
-      pointer-events:none;
-    }
-    .member-name{
-      position: relative;
-      font-weight: 800;
-      letter-spacing: .2px;
-      margin: 0 0 6px;
-    }
-    .member-role{
-      position: relative;
-      color: rgba(223,234,255,.78);
-      font-weight: 600;
-      font-size: 13px;
-      letter-spacing: .3px;
-      text-transform: uppercase;
-      margin: 0 0 8px;
-    }
-    .member-meta{
-      position: relative;
-      color: var(--muted);
-      font-size: 12.8px;
-      line-height: 1.45;
-      margin: 0;
-    }
-
-    /* SRET hierarchy tree */
-    .tree-wrap{
-      display:flex;
-      justify-content:center;
-      padding: 10px 0 6px;
-    }
-    .sret-tree{
-      width: min(980px, 100%);
-      padding: 12px 8px 2px;
-      position:relative;
-    }
-
-    /* Nodes + layout */
-    .sret-level{
-      display:flex;
-      justify-content:center;
-      gap: 22px;
-      margin: 16px 0;
-      flex-wrap:wrap;
-    }
-    .sret-node{
-      position:relative;
-      background: linear-gradient(180deg, rgba(10,16,40,.80), rgba(10,16,40,.55));
-      border: 1px solid rgba(255,255,255,.12);
-      border-radius: 14px;
-      padding: 12px 14px;
-      min-width: 190px;
-      text-align:center;
-      font-weight: 800;
-      letter-spacing: .25px;
-      box-shadow: 0 16px 45px rgba(0,0,0,.28);
-    }
-    .sret-node.big{
-      min-width: 220px;
-      padding: 14px 16px;
-      border-color: rgba(0,240,255,.20);
-      box-shadow: 0 18px 55px rgba(0,0,0,.33);
-    }
-    .sret-role{
-      display:block;
-      margin-top: 6px;
+    .sret-role {
       font-size: 10.5px;
-      color: rgba(223,234,255,.82);
-      letter-spacing: .65px;
+      margin-top: 3px;
+      letter-spacing: 0.06em;
+      color: var(--muted);
+      font-weight: 600;
       text-transform: uppercase;
-      font-weight: 700;
     }
 
-    .sret-connector{
-      height: 18px;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-    }
-    .sret-connector:before{
-      content:"";
+    .sret-connector-vertical {
       width: 2px;
-      height: 18px;
-      background: rgba(255,255,255,.16);
-      display:block;
+      height: 12px;
+      background: linear-gradient(180deg, var(--primary-2), var(--primary));
+      opacity: 0.5;
+      margin: 4px 0;
     }
-    .sret-branch{
-      display:flex;
-      justify-content:center;
-      gap: 30px;
-      align-items:flex-start;
-      position:relative;
-      margin-top: 2px;
+
+    .sret-heads-row {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 16px;
+      margin-top: 18px;
+      position: relative;
+      width: 100%;
     }
-    .sret-branch:before{
-      content:"";
-      position:absolute;
-      top: -10px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: min(520px, 84%);
+
+    .sret-head-group {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-width: 185px;
+      max-width: 215px;
+      flex: 0 0 auto;
+    }
+
+    .sret-head-group .sret-node {
+      width: 100%;
+    }
+
+    .sret-members {
+      list-style: none;
+      padding: 6px 8px;
+      margin: 6px 0 0 0;
+      background: rgba(0, 240, 255, 0.08);
+      border: 1px solid rgba(0, 240, 255, 0.2);
+      border-radius: 10px;
+      width: 100%;
+      font-size: 10.5px;
+      color: var(--txt);
+    }
+
+    .sret-members li {
+      padding: 2px 0;
+      text-align: center;
+    }
+
+    /* Horizontal connector line above heads row */
+    .sret-heads-row::before {
+      content: "";
+      position: absolute;
+      top: -18px;
+      left: 5%;
+      right: 5%;
       height: 2px;
-      background: rgba(255,255,255,.16);
-    }
-    .sret-members{
-      list-style:none;
-      padding: 0;
-      margin: 0;
-      display:flex;
-      flex-direction:column;
-      gap: 12px;
+      background: linear-gradient(90deg, transparent, var(--primary-2) 20%, var(--primary) 50%, var(--primary-2) 80%, transparent);
+      opacity: 0.3;
+      z-index: 0;
     }
 
-    /* Footer */
-    footer{
-      border-top: 1px solid rgba(255,255,255,.10);
-      background: rgba(5,8,20,.55);
-      backdrop-filter: blur(12px);
-      padding: 16px 0;
-      color: rgba(223,234,255,.78);
-      text-align:center;
-      margin-top: 24px;
+    /* Responsive: Stack on mobile */
+    @media (max-width: 767.98px) {
+      .sret-heads-row {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .sret-heads-row::before {
+        display: none;
+      }
+
+      .sret-head-group {
+        max-width: 100%;
+        width: 100%;
+      }
+
+      .gs-row {
+        flex-direction: column;
+      }
     }
 
-    /* Team hierarchy photo between name and role */
+    /* NEW: small photo between name and role in hierarchy boxes */
     .sret-name{
-      font-weight: 700;
+      display:block;
+      font-weight:700;
     }
-
     .sret-avatar{
       width: 34px;
       height: 34px;
       border-radius: 50%;
       object-fit: cover;
-      margin: 6px 0 2px;
+      display:block;
+      margin: 6px auto 4px;
       border: 1px solid rgba(0,240,255,0.55);
       box-shadow: 0 0 10px rgba(0,240,255,0.18);
     }
-
-    /* keep top hierarchy slightly larger but still small */
     .sret-node.big .sret-avatar{
       width: 42px;
       height: 42px;
     }
+
+    /* Footer */
+    footer{ background:#060a13; color:#9fb3c8; padding:26px 0; text-align:center; }
+
+    /* Cart badge (consistent) */
+    .reg-badge{ position:relative }
+    .reg-badge .count{
+      position:absolute; top:-8px; right:-10px; background:#ff4d6d; color:#fff;
+      border-radius:999px; padding:2px 7px; font-size:.75rem; font-weight:700; box-shadow:0 0 0 2px #070b16;
+    }
   </style>
 </head>
-
 <body>
-  <!-- Navbar -->
-  <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
+
+  <!-- NAVBAR -->
+  <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
     <div class="container">
-      <a class="navbar-brand" href="index.html">ROBOTRON 3.0</a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMain">
+      <a class="navbar-brand" href="index.html">
+        <span class="brand-accent"></span> ROBOTRON
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
         <span class="navbar-toggler-icon"></span>
       </button>
-      <div class="collapse navbar-collapse" id="navMain">
-        <ul class="navbar-nav ms-auto gap-lg-2">
-          <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
-          <li class="nav-item"><a class="nav-link" href="categories.html">Home Gallery</a></li>
-          <li class="nav-item"><a class="nav-link active" href="team.html">Team</a></li>
-          <li class="nav-item"><a class="nav-link" href="registration.html">Registration</a></li>
-          <li class="nav-item"><a class="nav-link" href="contact.html">Contact</a></li>
-          <li class="nav-item"><a class="nav-link" href="admin.html">Admin</a></li>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item"><a class="nav-link" href="index.html"><i class="fa fa-home"></i> Home</a></li>
+          <li class="nav-item"><a class="nav-link active" href="team.html"><i class="fa fa-id-badge"></i> Team</a></li>
+          <li class="nav-item"><a class="nav-link" href="categories.html"><i class="fa fa-th-list"></i> Categories</a></li>
+          <li class="nav-item"><a class="nav-link" href="index.html#team"><i class="fa fa-photo"></i> Gallery</a></li>
+          <li class="nav-item"><a class="nav-link" href="contact.html"><i class="fa fa-envelope"></i> Contact</a></li>
         </ul>
       </div>
     </div>
   </nav>
 
-  <!-- Title -->
-  <div class="title-wrap">
+  <!-- HERO -->
+  <header class="page-hero">
     <div class="container">
-      <h1>Meet the Team</h1>
-      <p>
-        The people behind ROBOTRON 3.0: leadership, robotics, development, planning, marketing, logistics, finance,
-        design, competitions, and content.
-      </p>
+      <h2>Meet the Team</h2>
+      <div class="title-underline"></div>
+      <p class="mt-2" style="color:#9fb3c8">The minds powering Robotron 3.0</p>
     </div>
-  </div>
+  </header>
 
-  <div class="container pb-4">
-    <!-- SRET Hierarchy -->
-    <div class="glass-card">
-      <h2 class="section-title"><span class="dot"></span>Team Hierarchy</h2>
-
-      <div class="tree-wrap">
-        <div class="sret-tree">
-
-          <!-- Level 1 -->
-          <div class="sret-level">
-            <div class="sret-node big">
-              <span class="sret-name">Abdul Rehman</span>
-              <img class="sret-avatar" src="sret.png" alt="Abdul Rehman">
-              <span class="sret-role">PRESIDENT</span>
-            </div>
+  <!-- SRET HIERARCHY -->
+  <section id="sret-hierarchy" class="section">
+    <div class="container">
+      <div class="sret-chart">
+        <!-- Level 1: President -->
+        <div class="sret-level-main">
+          <div class="sret-node big">
+            <span class="sret-name">Abdul Rehman</span>
+            <img class="sret-avatar" src="sret.png" alt="Abdul Rehman">
+            <span class="sret-role">PRESIDENT</span>
           </div>
+        </div>
 
-          <div class="sret-connector"></div>
+        <!-- Connector -->
+        <div class="sret-connector-vertical"></div>
 
-          <!-- Level 2 -->
-          <div class="sret-level">
-            <div class="sret-node big">
-              <span class="sret-name">Hasan Kamal Ibrahim Salman</span>
-              <img class="sret-avatar" src="sret.png" alt="Hasan Kamal Ibrahim Salman">
-              <span class="sret-role">VICE PRESIDENT</span>
-            </div>
+        <!-- Level 2: Vice President -->
+        <div class="sret-level-main">
+          <div class="sret-node big">
+            <span class="sret-name">Hasan Kamal Ibrahim Salman</span>
+            <img class="sret-avatar" src="sret.png" alt="Hasan Kamal Ibrahim Salman">
+            <span class="sret-role">VICE PRESIDENT</span>
           </div>
+        </div>
 
-          <div class="sret-connector"></div>
+        <!-- Connector -->
+        <div class="sret-connector-vertical"></div>
 
-          <!-- Level 3 -->
-          <div class="sret-level">
-            <div class="sret-branch">
-              <div class="sret-node big">
-                <span class="sret-name">Usaid Salman</span>
-                <img class="sret-avatar" src="sret.png" alt="Usaid Salman">
-                <span class="sret-role">GENERAL SECRETARY</span>
-              </div>
-              <div class="sret-node big">
-                <span class="sret-name">Usayd Omerson</span>
-                <img class="sret-avatar" src="sret.png" alt="Usayd Omerson">
-                <span class="sret-role">GENERAL SECRETARY</span>
-              </div>
-            </div>
+        <!-- Level 3: General Secretaries -->
+        <div class="sret-level-main gs-row">
+          <div class="sret-node big">
+            <span class="sret-name">Usaid Salman</span>
+            <img class="sret-avatar" src="sret.png" alt="Usaid Salman">
+            <span class="sret-role">GENERAL SECRETARY</span>
           </div>
+          <div class="sret-node big">
+            <span class="sret-name">Usayd Omerson</span>
+            <img class="sret-avatar" src="sret.png" alt="Usayd Omerson">
+            <span class="sret-role">GENERAL SECRETARY</span>
+          </div>
+        </div>
 
-          <div class="sret-connector"></div>
+        <!-- Connector -->
+        <div class="sret-connector-vertical"></div>
 
-          <!-- Level 4 (Department Heads) -->
-          <div class="sret-level" style="justify-content:center;">
+        <!-- Level 4: Department Heads -->
+        <div class="sret-heads-row">
+          <!-- Robotics Head -->
+          <div class="sret-head-group">
+            <div class="sret-node">
+              <span class="sret-name">Musab Khan</span>
+              <img class="sret-avatar" src="sret.png" alt="Musab Khan">
+              <span class="sret-role">ROBOTICS HEAD</span>
+            </div>
+            <div class="sret-connector-vertical"></div>
             <ul class="sret-members">
-              <li>
-                <div class="sret-node">
-                  <span class="sret-name">Musab Khan</span>
-                  <img class="sret-avatar" src="sret.png" alt="Musab Khan">
-                  <span class="sret-role">ROBOTICS HEAD</span>
-                </div>
-              </li>
-              <li>
-                <div class="sret-node">
-                  <span class="sret-name">Sadiq Yousuf</span>
-                  <img class="sret-avatar" src="sret.png" alt="Sadiq Yousuf">
-                  <span class="sret-role">PLANNING HEAD</span>
-                </div>
-              </li>
-              <li>
-                <div class="sret-node">
-                  <span class="sret-name">Abdullah Malick</span>
-                  <img class="sret-avatar" src="sret.png" alt="Abdullah Malick">
-                  <span class="sret-role">MARKETING HEAD</span>
-                </div>
-              </li>
-              <li>
-                <div class="sret-node">
-                  <span class="sret-name">Abdul Muqeet</span>
-                  <img class="sret-avatar" src="sret.png" alt="Abdul Muqeet">
-                  <span class="sret-role">SECURITY & LOGISTICS HEAD</span>
-                </div>
-              </li>
-              <li>
-                <div class="sret-node">
-                  <span class="sret-name">Hashir Ali</span>
-                  <img class="sret-avatar" src="sret.png" alt="Hashir Ali">
-                  <span class="sret-role">SPONSORSHIP & FINANCE HEAD</span>
-                </div>
-              </li>
-              <li>
-                <div class="sret-node">
-                  <span class="sret-name">Ahmed Siddiqui</span>
-                  <img class="sret-avatar" src="sret.png" alt="Ahmed Siddiqui">
-                  <span class="sret-role">DESIGNING HEAD</span>
-                </div>
-              </li>
-              <li>
-                <div class="sret-node">
-                  <span class="sret-name">Awwab Ahmed</span>
-                  <img class="sret-avatar" src="sret.png" alt="Awwab Ahmed">
-                  <span class="sret-role">COMPETITIONS HEAD</span>
-                </div>
-              </li>
-              <li>
-                <div class="sret-node">
-                  <span class="sret-name">Sunain Sadiq</span>
-                  <img class="sret-avatar" src="sret.png" alt="Sunain Sadiq">
-                  <span class="sret-role">DEVELOPER HEAD</span>
-                </div>
-              </li>
-              <li>
-                <div class="sret-node">
-                  <span class="sret-name">Yousuf Ahmer</span>
-                  <img class="sret-avatar" src="sret.png" alt="Yousuf Ahmer">
-                  <span class="sret-role">CONTENT HEAD</span>
-                </div>
-              </li>
+              <li>Saad Lakhanri</li>
+              <li>Rayan Khan</li>
+              <li>Rawaha</li>
+              <li>Masharib</li>
             </ul>
           </div>
 
+          <!-- Planning Head -->
+          <div class="sret-head-group">
+            <div class="sret-node">
+              <span class="sret-name">Sadiq Yousuf</span>
+              <img class="sret-avatar" src="sret.png" alt="Sadiq Yousuf">
+              <span class="sret-role">PLANNING HEAD</span>
+            </div>
+            <div class="sret-connector-vertical"></div>
+            <ul class="sret-members">
+              <li>Ali Rasheed</li>
+            </ul>
+          </div>
+
+          <!-- Marketing Head -->
+          <div class="sret-head-group">
+            <div class="sret-node">
+              <span class="sret-name">Abdullah Malick</span>
+              <img class="sret-avatar" src="sret.png" alt="Abdullah Malick">
+              <span class="sret-role">MARKETING HEAD</span>
+            </div>
+            <div class="sret-connector-vertical"></div>
+            <ul class="sret-members">
+              <li>Ammar Asif</li>
+              <li>Usman Asif</li>
+            </ul>
+          </div>
+
+          <!-- Security & Logistics Head -->
+          <div class="sret-head-group">
+            <div class="sret-node">
+              <span class="sret-name">Abdul Muqeet</span>
+              <img class="sret-avatar" src="sret.png" alt="Abdul Muqeet">
+              <span class="sret-role">SECURITY & LOGISTICS HEAD</span>
+            </div>
+            <div class="sret-connector-vertical"></div>
+            <ul class="sret-members">
+              <li>Armughan</li>
+              <li>Ammar Asif</li>
+              <li>Qawaim Hamid</li>
+            </ul>
+          </div>
+
+          <!-- Sponsorship & Finance Head -->
+          <div class="sret-head-group">
+            <div class="sret-node">
+              <span class="sret-name">Hashir Ali</span>
+              <img class="sret-avatar" src="sret.png" alt="Hashir Ali">
+              <span class="sret-role">SPONSORSHIP & FINANCE HEAD</span>
+            </div>
+            <div class="sret-connector-vertical"></div>
+            <ul class="sret-members">
+              <li>Ibrahim Fahad</li>
+              <li>Mustafa Fahad</li>
+              <li>Usman Asif</li>
+              <li>Usaid Ul Hakeem</li>
+            </ul>
+          </div>
+
+          <!-- Designing Head -->
+          <div class="sret-head-group">
+            <div class="sret-node">
+              <span class="sret-name">Ahmed Siddiqui</span>
+              <img class="sret-avatar" src="sret.png" alt="Ahmed Siddiqui">
+              <span class="sret-role">DESIGNING HEAD</span>
+            </div>
+            <div class="sret-connector-vertical"></div>
+            <ul class="sret-members">
+              <li>Muhammad Abbas</li>
+              <li>Ali Rasheed</li>
+            </ul>
+          </div>
+
+          <!-- Competitions Head -->
+          <div class="sret-head-group">
+            <div class="sret-node">
+              <span class="sret-name">Awwab Ahmed</span>
+              <img class="sret-avatar" src="sret.png" alt="Awwab Ahmed">
+              <span class="sret-role">COMPETITIONS HEAD</span>
+            </div>
+            <div class="sret-connector-vertical"></div>
+            <ul class="sret-members">
+              <li>Saad Lakhanri</li>
+              <li>Usayd Omerson</li>
+              <li>Armughan</li>
+            </ul>
+          </div>
+
+          <!-- Developer Head -->
+          <div class="sret-head-group">
+            <div class="sret-node">
+              <span class="sret-name">Sunain Sadiq</span>
+              <img class="sret-avatar" src="sret.png" alt="Sunain Sadiq">
+              <span class="sret-role">DEVELOPER HEAD</span>
+            </div>
+            <div class="sret-connector-vertical"></div>
+            <ul class="sret-members">
+              <li>Hasan Qureshi</li>
+              <li>Omer Qureshi</li>
+            </ul>
+          </div>
+
+          <!-- Content Head -->
+          <div class="sret-head-group">
+            <div class="sret-node">
+              <span class="sret-name">Yousuf Ahmer</span>
+              <img class="sret-avatar" src="sret.png" alt="Yousuf Ahmer">
+              <span class="sret-role">CONTENT HEAD</span>
+            </div>
+            <div class="sret-connector-vertical"></div>
+            <ul class="sret-members">
+              <li>Rayyan Khan</li>
+              <li>Ali Amir</li>
+            </ul>
+          </div>
         </div>
       </div>
     </div>
+  </section>
 
-    <!-- Team Cards -->
-    <div class="glass-card">
-      <h2 class="section-title"><span class="dot"></span>All Members</h2>
-
-      <div class="team-grid">
-        <div class="member-card">
-          <h3 class="member-name">Abdul Rehman</h3>
-          <div class="member-role">President</div>
-          <p class="member-meta">Leads the society and oversees all departments and operations.</p>
-        </div>
-
-        <div class="member-card">
-          <h3 class="member-name">Hasan Kamal Ibrahim Salman</h3>
-          <div class="member-role">Vice President</div>
-          <p class="member-meta">Supports leadership and drives execution across teams.</p>
-        </div>
-
-        <div class="member-card">
-          <h3 class="member-name">Usaid Salman</h3>
-          <div class="member-role">General Secretary</div>
-          <p class="member-meta">Manages coordination, documentation, and internal communication.</p>
-        </div>
-
-        <div class="member-card">
-          <h3 class="member-name">Usayd Omerson</h3>
-          <div class="member-role">General Secretary</div>
-          <p class="member-meta">Handles operations support and cross-team coordination.</p>
-        </div>
-
-        <div class="member-card">
-          <h3 class="member-name">Musab Khan</h3>
-          <div class="member-role">Robotics Head</div>
-          <p class="member-meta">Leads robotics initiatives, builds, mentoring, and technical direction.</p>
-        </div>
-
-        <div class="member-card">
-          <h3 class="member-name">Sadiq Yousuf</h3>
-          <div class="member-role">Planning Head</div>
-          <p class="member-meta">Plans timelines, schedules, and ensures smooth event execution.</p>
-        </div>
-
-        <div class="member-card">
-          <h3 class="member-name">Abdullah Malick</h3>
-          <div class="member-role">Marketing Head</div>
-          <p class="member-meta">Runs marketing strategy, promotion, and outreach.</p>
-        </div>
-
-        <div class="member-card">
-          <h3 class="member-name">Abdul Muqeet</h3>
-          <div class="member-role">Security & Logistics Head</div>
-          <p class="member-meta">Manages safety, venue logistics, and event operations.</p>
-        </div>
-
-        <div class="member-card">
-          <h3 class="member-name">Hashir Ali</h3>
-          <div class="member-role">Sponsorship & Finance Head</div>
-          <p class="member-meta">Handles sponsorship acquisition, finance planning, and budgeting.</p>
-        </div>
-
-        <div class="member-card">
-          <h3 class="member-name">Ahmed Siddiqui</h3>
-          <div class="member-role">Designing Head</div>
-          <p class="member-meta">Leads visuals, branding, and design assets for the event.</p>
-        </div>
-
-        <div class="member-card">
-          <h3 class="member-name">Awwab Ahmed</h3>
-          <div class="member-role">Competitions Head</div>
-          <p class="member-meta">Owns competition structure, rules, and coordination.</p>
-        </div>
-
-        <div class="member-card">
-          <h3 class="member-name">Sunain Sadiq</h3>
-          <div class="member-role">Developer Head</div>
-          <p class="member-meta">Manages website/app development and technical integrations.</p>
-        </div>
-
-        <div class="member-card">
-          <h3 class="member-name">Yousuf Ahmer</h3>
-          <div class="member-role">Content Head</div>
-          <p class="member-meta">Creates content, announcements, and event documentation.</p>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Footer -->
+  <!-- FOOTER -->
   <footer>
     <div class="container">
-      ROBOTRON 3.0 © 2025 • Team Page
+      <p>&copy; 2025 Robotron. Made By SRET</p>
     </div>
   </footer>
 
+  <!-- Scripts -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-
   <script>
-    // Optional helper: highlight the active nav item (if needed)
+    // ---------- Cart badge count (consistent across pages) ----------
+    const CART_KEY='robotronCart';
+    function getCart(){ try { return JSON.parse(localStorage.getItem(CART_KEY)) || []; } catch(e){ return []; } }
+    function cartCount(){ return getCart().reduce((s,i)=>s+(i.quantity||1),0); }
     (function(){
-      const path = (location.pathname || '').split('/').pop();
-      document.querySelectorAll('.nav-link').forEach(a=>{
-        const href = (a.getAttribute('href') || '').trim();
-        if(href === path){ a.classList.add('active'); }
-      });
+      const el=document.getElementById('cartCount');
+      if(!el) return;
+      const n=cartCount();
+      if(n>0){ el.textContent=n; el.style.display='inline-block'; }
     })();
   </script>
 </body>
